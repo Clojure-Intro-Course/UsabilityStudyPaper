@@ -72,15 +72,27 @@ garbage collection and runtime optimizations. However, this also presents a chal
 runtime environment operates with Java types, and Clojure error messages come directly from the Java runtime
 system. We discuss implications of this design decision in Section~\ref{subsec:challenges}.
 
+Like all Lisp, Clojure is dynamically typed. This has an advantage that beginners do not need to worry about type declarations
+for variables and functions, and it is easy to write polymorphic functions. 
+Data is immutable by default: there are several built-in data types that support various concurrency models, 
+but it is easy to present a completely immutable subset of the language to beginners. 
+The language provides a rich system of predefined collection: lists, vectors, hash maps, and set, to name the 
+most common ones. Many functions that work on collections return lazy sequences: sequences that are not evaluated 
+until they are needed, and only the needed portion is evaluated. 
+ 
+
 \subsection{Challenges}\label{subsec:challenges}
 
 \emcomment{mention IDE, in addition to the error messages}
+
+\emcomment{multiple types for the same thing; a bit of type confusion due to the same elements implementing different interfaces}
 
 \section{Error messages adapted for beginners}\label{sec:errors-work}
 \hfcomment{WORRRRRRRRRRRRRRRRRRRDS}
 
 \subsection{Examples}
-Here are some examples of the error messages we've developed, and the original error messages. The examples of original error messages have been limited in length; they always include a complete stack trace that is no shorter than fifty lines.
+Here are some examples of the error messages we've developed, and the original error messages. 
+The examples of original error messages have been limited in length; they always include a complete stack trace that is no shorter than fifty lines.
 
 \subsubsection{Illegal argument}
 {\tt (first 3)}
@@ -143,6 +155,8 @@ Cannot call nil as a function.
 \subsection{Stack filtering}
 We also filter the stack trace, removing portions that mention the compiler and internals of Clojure. For example, the stracktrace 
 
+\emcomment{Might need to shorten, move}
+
 \begin{verbatim}
 corefns.corefns/first (corefns.clj line 38)
 intro.may2015/eval8701 (may2015.clj line 48)
@@ -176,6 +190,8 @@ intro.core/-main (core.clj line 114)
 Which should be considerably better.
 \hfcomment{actually words here}
 \emcomment{Stack filtering}
+
+\emcomment{Lazy sequences preview}
 
 \section{Design of usability study}\label{sec:study}
 	\thcomment{This is just the MICS section copied over}
