@@ -8,8 +8,10 @@
 
 %% Elena's favorite green (thanks, Fernando!)
 \definecolor{ForestGreen}{RGB}{34,139,34}
+\definecolor{Teal}{RGB}{2,132,130}
 % Uncomment this if you don't want to show comments
 \newcommand{\emcomment}[1]{{\bf \textcolor{ForestGreen}{\allcomments{{#1}}}}}
+\newcommand{\hfcomment}[1]{\textcolor{Teal}{\allcomments{Henry: {#1}}}}
 \newcommand{\thcomment}[1]{{\bf \textcolor{blue}{\allcomments{{#1}}}}}
 \newcommand{\todo}[1]{{\bf \color{magenta}{\allcomments{ To-do: {#1}}}}}
 
@@ -75,34 +77,104 @@ system. We discuss implications of this design decision in Section~\ref{subsec:c
 \emcomment{mention IDE, in addition to the error messages}
 
 \section{Error messages adapted for beginners}\label{sec:errors-work}
-%\emcomment{Make sure that examples are more involved than in the previous paper}
+\hfcomment{WORRRRRRRRRRRRRRRRRRRDS}
 
+\subsection{Examples}
+Here are some examples of the error messages we've developed, and the original error messages. The examples of original error messages have been limited in length; they always include a complete stack trace that is no shorter than fifty lines.
+
+\subsubsection{Illegal argument}
 {\tt (first 3)}
 
+Here we attempt to take the first of a number:
+\begin{verbatim}
+Exception in thread "main" java.lang.IllegalArgumentException:
+Don't know how to create ISeq from:
+java.lang.Long, compiling:(/tmp/form-init143909617110072064.clj:1:72)
+\end{verbatim}
+
+
+And our improved version of the error:
 \begin{verbatim}
 In function first, the first argument 3 must be a sequence but is a number.
 \end{verbatim}
 
-\emcomment{Show original}
-
+\subsubsection{Incorrect arity}
 {\tt (even? 3 6 1)}
 
+This example demonstrates arity exceptions on \texttt{even?}:
+\begin{verbatim}
+Exception in thread "main" clojure.lang.ArityException:
+Wrong number of args (3) passed to:
+core/even?, compiling:(/tmp/form-init5079227190989845185.clj:1:73)
+\end{verbatim}
+And our improved version of the error:
 \begin{verbatim}
 You cannot pass three arguments to a function even?, need one.
 \end{verbatim}
 
+\subsubsection{Incorrect arity of a lambda}
 {\tt ((fn [ x y] (+ x y)) 2)}
 
+An anonymous function that takes two args and is given one:
+\begin{verbatim}
+Exception in thread "main" clojure.lang.ArityException:
+Wrong number of args (1) passed to: 
+core/-main/fn--1012, compiling:(/tmp/form-init5193142143408385708.clj:1:73)
+\end{verbatim}
+And our improved version of the error:
 \begin{verbatim}
 You cannot pass one argument to this anonymous function.
 \end{verbatim}
 
+\subsubsection{Calling nil as a function}
+{\tt (nil 5)}
+
+The result of calling nil as a function:
+\begin{verbatim}
+Exception in thread "main" java.lang.IllegalArgumentException:
+Can't call nil, compiling:
+(amicable/core.clj:29:1)
+\end{verbatim}
+And our improved version of the error:
 \begin{verbatim}
 Cannot call nil as a function.
 \end{verbatim}
 
-{\tt (nil 5)}
+\subsection{Stack filtering}
+We also filter the stack trace, removing portions that mention the compiler and internals of Clojure. For example, the stracktrace 
 
+\begin{verbatim}
+corefns.corefns/first (corefns.clj line 38)
+intro.may2015/eval8701 (may2015.clj line 48)
+clojure.lang.Compiler/eval (Compiler.java line 6792)
+clojure.lang.Compiler/load (Compiler.java line 7237)
+clojure.lang.Compiler/loadFile (Compiler.java line 7175)
+clojure.lang.RT$3/invoke (RT.java line 319)
+intro.core/-main (core.clj line 114)
+clojure.lang.RestFn/invoke (RestFn.java line 397)
+clojure.lang.Var/invoke (Var.java line 375)
+user/eval5 (form-init4829442094537982229.clj line 1)
+clojure.lang.Compiler/eval (Compiler.java line 6792)
+clojure.lang.Compiler/eval (Compiler.java line 6782)
+clojure.lang.Compiler/load (Compiler.java line 7237)
+clojure.lang.Compiler/loadFile (Compiler.java line 7175)
+clojure.main/load-script (main.clj line 275)
+clojure.main/init-opt (main.clj line 280)
+clojure.main/initialize (main.clj line 308)
+clojure.main/null-opt (main.clj line 343)
+clojure.main/main (main.clj line 421)
+\end{verbatim}
+ 
+becomes 
+
+\begin{verbatim}
+corefns.corefns/first (corefns.clj line 38)
+intro.may2015/eval8701 (may2015.clj line 48)
+intro.core/-main (core.clj line 114)
+\end{verbatim} 
+ 
+Which should be considerably better.
+\hfcomment{actually words here}
 \emcomment{Stack filtering}
 
 \section{Design of usability study}\label{sec:study}
