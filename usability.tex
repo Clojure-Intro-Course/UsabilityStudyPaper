@@ -42,25 +42,40 @@ TBD
 \section{Introduction}\label{sec:intro}
 
 \section{Towards teaching Clojure in an introductory class}\label{sec:project}
+\emcomment{Some of this may move to intro}
 Languages in the Lisp family have along history of being a successful first programming language for college-level students~\cite{Felleisen:2004}. 
 Functional languages tend to have simpler, more uniform syntax and semantics that students master quickly.
 They focus on functional abstraction, modularity, generalization, and recursion -- concepts that are essential for computer science methods of 
 problem solving and a structural, systematic approach to software development. 
-Lisps have been successfully used in introductory languages in many computer science college programs, including UMM. 
+Lisp Read-Eval-Print Loop (REPL) provides an opportunity to test code interactively as it's being developed. 
+Lisps have been successfully used in introductory languages in many computer science college programs, including UMM: 
+one of our introductory classes for CS majors and minors uses Racket programming language~\cite{htdp,htdp2} (the other,
+equivalent, one uses Python). 
 
 Clojure is a relatively new addition to the Lisp language family. Released in 2007 by Rich Hickey~\cite{Hickey:2008}, it has rapidly gained popularity in industry
 and in programming community in general 
 due to its elegant design and suitability for concurrent programming. A very active open source Clojure community has developed numerous 
-libraries for a diverse set of applications. 
+libraries for a diverse set of applications, from web development to data processing. 
+
+Our project aims at creating a setup for using Clojure in an introductory CS class. Clojure was designed with experienced programmers in mind, 
+and using it as a first programming language presents challenges. Our goal is to develop ways to support beginner-friendly Clojure interactions. 
 
 \subsection{Overview of Clojure}\label{subsec:clojure}
 
+\emcomment{Features: JVM, data structures, dynamic types -- not in this order, probably}
+Unlike other Lisps that come with their own interpreter that was developed just for their own dialect, Clojure is compiled 
+into Java bytecode and runs on the Java virtual machine (JVM). This provides the benefits of compatibility with 
+any platform that supports Java, the ability to use any Java library, and the opportunity to take advantage of Java 
+garbage collection and runtime optimizations. However, this also presents a challenge since the underlying Java 
+runtime environment operates with Java types, and Clojure error messages come directly from the Java runtime
+system. We discuss implications of this design decision in Section~\ref{subsec:challenges}.
+
 \subsection{Challenges}\label{subsec:challenges}
 
-\emcomment{mention IDE}
+\emcomment{mention IDE, in addition to the error messages}
 
 \section{Error messages adapted for beginners}\label{sec:errors-work}
-\emcomment{Make sure that examples are more involved than in the previous paper}
+%\emcomment{Make sure that examples are more involved than in the previous paper}
 
 {\tt (first 3)}
 
