@@ -23,14 +23,14 @@
 \and
 Henry Fellows
 \institute{University of Minnesota, Morris
-\email{?@morris.umn.edu}}
+\email{fello056@morris.umn.edu}}
 \and 
 Thomas Hagen
 \institute{University of Minnesota, Morris
 \email{hagen715@morris.umn.edu}}
 \and Sean Stockholm
 \institute{University of Minnesota, Morris
-\email{?@morris.umn.edu}}
+\email{stock424@morris.umn.edu}}
 }
 \def\titlerunning{Clojure error messages}
 \def\authorrunning{E. Machkasova, H. Fellows, T. Hagen \& S. Stockholm }
@@ -51,7 +51,7 @@ error messages use inconsistent terminology, are ambiguous or misleading, and do
 %This observation is consistent with the general programming languages community undervaluing of error messages quality. 
 There has been very little formal study of usability of error messages for beginners, and very little methodology developed for such studies. The notable exception is the development and study of beginner-friendly error messages in the Racket programming language \cite{Marceau:2011,Marceau:2011-2}.
 This paper discusses our work towards creating beginner-friendly error messages in the Clojure programming language with the goal of using Clojure as the first language in an introductory CS class.  
-We also discuss a usability study that we have developed (although not yet conducted) to compare our beginner-oriented error messages to the original Clojure messages,a s well as to Racket error messages.
+We also discuss a usability study that we have developed (although not yet conducted) to compare our beginner-oriented error messages to the original Clojure messages, as well as to Racket error messages.
 
 \section{Towards teaching Clojure in an introductory class}\label{sec:project}
 %\emcomment{Some of this may move to intro}
@@ -194,8 +194,7 @@ You cannot pass three arguments to a function even?, need one.
 {\tt ((fn [ x y] (+ x y)) 2)}. The original message is as follows (using an auto-generated identifier for the function): 
 \begin{verbatim}
 Exception in thread "main" clojure.lang.ArityException:
-Wrong number of args (1) passed to: 
-core/-main/fn--1012
+Wrong number of args (1) passed to: core/-main/fn--1012
 \end{verbatim}
 Our version of the error is:
 \begin{verbatim}
@@ -212,9 +211,10 @@ Our version of the error is:
 \begin{verbatim}
 Cannot call nil as a function.
 \end{verbatim}
-Note that in this case we are aided by Clojure providing a special error message for using {\tt nil} in a function position. In other cases, 
-such as passing {\tt nil} as an argument, where a number or a string were expected, we are able to detect {\tt nil} by its type, since it is
-a type of its own.  
+Note that since {tt nil} is iits own type, it is easy to detect without causing a much less informative null pointer exception. 
+% in this case we are aided by Clojure providing a special error message for using {\tt nil} in a function position. In other cases, 
+%such as passing {\tt nil} as an argument, where a number or a string were expected, we are able to detect {\tt nil} by its type, since it is
+%a type of its own.  
 
 %\subsection{Stack filtering}
 %We also filter the stack trace, removing portions that mention the compiler and internals of Clojure. For example, the stracktrace 
@@ -400,7 +400,7 @@ The original Clojure error message is:
 \begin{verbatim}
 		IllegalArgumentException Don't know how to create ISeq from: java.lang.Long 
 \end{verbatim}
-The Racket error is {\tt first: expects a non-empty list; given: 5}, whereas our error is somewhat more verbose: 
+The Racket error is: {\tt first:expects a non-empty list; given:5}. Our error is somewhat more verbose: 
 {\tt In function {\bf first}, the first argument 5 must be a sequence but is a number.}
 
 
