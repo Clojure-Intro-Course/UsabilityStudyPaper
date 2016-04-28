@@ -259,15 +259,33 @@ a type of its own.
 
 \emcomment{Lazy sequences preview}
 
-\section{Design of usability study}\label{sec:study}
-%	\thcomment{This is just the MICS section copied over}
-	
-	\subsection{Study participants}\label{sec:obj}
-The usability study that we have developed is structured around ``parallel questions'': erroneous fragments that are the same in 
-Racket and Clojure (except the syntactic differences), but result in different error messages.  
-The participants for the study are volunteer students from the U of M, Morris who have taken the introductory computer science course in Racket and have no, or very little, experience with Clojure.
+\section{Design of a comparative usability study}\label{sec:study}
+Anecdotal evidence (primarily our own work in the system with the new error messages) shows that 
+in many cases we are able to report errors accurately and in a wording that does not require 
+knowledge of Java. However, in order to assess how well the error messages work for beginner 
+programmers, we need to conduct a usability study. Some questions we would like to answer. 
+The approach by Marceau et al~\cite{Marceau:2011} is to measure whether an error message 
+leads a student in the direction of a correct edit, or away from it. 
+
+One of the obvious comparison points is the original Clojure error messages. However, given that 
+a lot of UMM students have experience with Racket, we have designed a study that would allow us 
+to compare our error messages to those in Racket. The two languages are quite similar, and since we
+cannot teach our study subjects Clojure in the process of the study due to time constraints, we are 
+limited to the features of Clojure that closely parallel Racket. 
+
+The results of the study would point out whether our transformed error messages are helpful to beginner 
+programmers. 
+Since participants may introduce further errors while trying to correct the fragments they are given, 
+the study would allow us to detect cases of errors outside of the directly prepared scope, and thus
+will serve as a testing ground for robustness of our system.  
+While we have mostly completed the development of the study questions and the setup, the
+study has not been conducted. We expect to complete it by the end of May 2016. 
+
+The usability study that we have developed is structured around ``parallel questions'': erroneous fragments that are very similar in 
+Racket and Clojure. 
+The participants for the study are volunteer UMM students (first year and sophomores) who have taken the introductory computer science course in Racket and have no, or very little, experience with Clojure.
 Participants will be recruited via the CS department mailing list, as well as via email and short presentations in freshmen and sophomore level CS classes. 
-In order to attract a larger and more diverse student population for the study, students will be compensated for their time, thanks to a gift from Cognitect, Inc. 
+In order to attract a larger and more diverse student population for the study, students will receive a small financial compensated for their time, thanks to a gift from Cognitect, Inc. 
 The study is exempt from full IRB review. 
 
 	\subsection{Experimental Setup}\label{sec:setup}
