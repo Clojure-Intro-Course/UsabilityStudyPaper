@@ -16,7 +16,7 @@
 \newcommand{\todo}[1]{{\bf \color{magenta}{\allcomments{ To-do: {#1}}}}}
 
 
-\title{TBD: Usability of Clojure error messages (extended abstract).}
+\title{Usability of beginner-oriented Clojure error messages (extended abstract).}
 \author{Elena Machkasova 
 \institute{University of Minnesota, Morris
 \email{elenam@morris.umn.edu}}
@@ -50,11 +50,11 @@ error messages use inconsistent terminology, are ambiguous or misleading, and do
 %Anecdotal evidence (informal questioning of about 10 CS students and almuni by the authors) indicates that novice programmers often do not even realize that an error message may contain useful information, except perhaps the line number; some ignore these messages entirely. 
 %This observation is consistent with the general programming languages community undervaluing of error messages quality. 
 There has been very little formal study of usability of error messages for beginners, and very little methodology developed for such studies. The notable exception is the development and study of beginner-friendly error messages in the Racket programming language \cite{Marceau:2011,Marceau:2011-2}.
-
-\emcomment{mention Racket, mention comparison} 
+This paper discusses our work towards creating beginner-friendly error messages in the Clojure programming language with the goal of using Clojure as the first language in an introductory CS class.  
+We also discuss a usability study that we have developed (although not yet conducted) to compare our beginner-oriented error messages to the original Clojure messages,a s well as to Racket error messages.
 
 \section{Towards teaching Clojure in an introductory class}\label{sec:project}
-\emcomment{Some of this may move to intro}
+%\emcomment{Some of this may move to intro}
 Languages in the Lisp family have a long history of being a successful first programming language for college-level students.
 The famous Abelson and Sussman textbook~\cite{Abelson} had been used in numerous introductory courses.
 In the recent years Python replaced Lisp/Scheme as a first beginners' language to a large degree. However, 
@@ -132,17 +132,15 @@ Our approach to providing more beginner-friendly error messages consists of seve
 \begin{enumerate}
 \item Provide ``wrappers'' for most commonly used predefined functions that have preconditions
 for the arguments. For instance, {\tt map} must have a function as its first argument, a sequence 
-(or a type that can be turned into one, which can be checked with {\tt seqable} predicate) as its second argument, 
-and may contain more {\tt seqable}  arguments. Arguments that are violating pre-conditions are reported. 
+(or a type that can be turned into one) as its second argument, 
+and may contain more sequences as  arguments. 
 If all arguments type-check, the original Clojure function is called. 
 \item If the error is coming from a context other than our own pre-condition, we attempt to match the exception by its
 type, and then match its message via a regular expression. 
 \item In all cases we perform type substitution (replacing Java types by their simpler counterparts that are 
 understandable without knowing Java). For instance, {\tt java.lang.Long, java.lang.Number}, and
-{java.lang.Double} all are reported as just a {\tt number}. This is somewhat less straightforward than it seems since 
-some elements belong to multiple types in the type hierarchy. For instance, a Clojure keyword, such as {\tt :name}, is also a function, since 
-it can be applied as a selector to a hash map: {\tt (:name \{:name "Mary", :age 20\})}. We match more specific types first, and then moving towards 
-a more general ones. 
+{java.lang.Double} all are reported as just a {\tt number}. Care must be taken to handle type hierarchy correctly. For instance, a keyword, such as {\tt :name}, is also a function, since 
+it can be applied as a selector to a hash map: {\tt (:name \{:name "Mary", :age 20\})}. We check for a more specific type first.
 \item For all error messages we also the stack trace to leave, in most cases, only the student's code and the Clojure core functions. 
 Our system allows customizable stack trace filtering (currently hard-coded, but can easily be controlled from the command line or via a 
 settings file or a menu). 
@@ -257,7 +255,7 @@ a type of its own.
 %\hfcomment{actually words here}
 %\emcomment{Stack filtering}
 
-\emcomment{Lazy sequences preview}
+%\emcomment{Lazy sequences preview}
 
 \section{Design of a comparative usability study}\label{sec:study}
 Anecdotal evidence (primarily our own work in the system with the new error messages) shows that 
@@ -269,9 +267,12 @@ leads a student in the direction of a correct edit, or away from it.
 
 One of the obvious comparison points is the original Clojure error messages. However, given that 
 a lot of UMM students have experience with Racket, we have designed a study that would allow us 
-to compare our error messages to those in Racket. The two languages are quite similar, and since we
+to compare our error messages to those in Racket. 
+The two languages are quite similar, and since we
 cannot teach our study subjects Clojure in the process of the study due to time constraints, we are 
 limited to the features of Clojure that closely parallel Racket. 
+Since Racket has been designed with focus on beginner programmers' experience,
+it is a great comparison point for our error messages. 
 
 The results of the study would point out whether our transformed error messages are helpful to beginner 
 programmers. 
@@ -281,88 +282,137 @@ will serve as a testing ground for robustness of our system.
 While we have mostly completed the development of the study questions and the setup, the
 study has not been conducted. We expect to complete it by the end of May 2016. 
 
-The usability study that we have developed is structured around ``parallel questions'': erroneous fragments that are very similar in 
-Racket and Clojure. 
 The participants for the study are volunteer UMM students (first year and sophomores) who have taken the introductory computer science course in Racket and have no, or very little, experience with Clojure.
 Participants will be recruited via the CS department mailing list, as well as via email and short presentations in freshmen and sophomore level CS classes. 
 In order to attract a larger and more diverse student population for the study, students will receive a small financial compensated for their time, thanks to a gift from Cognitect, Inc. 
 The study is exempt from full IRB review. 
 
-	\subsection{Experimental Setup}\label{sec:setup}
+\subsection{The study setup}\label{sec:setup}
+
+The usability study that we have developed is structured around ``parallel questions'': erroneous fragments that are very similar in 
+Racket and Clojure. Each question will present an erroneous code fragment and test cases that show the intent of the fragment. 
+Participants will be asked to fix the fragment to make the tests pass.
+General principles of questions selection, as well as an example of a question, are given in Section~\ref{sec:select}.
+ They can browse the questions and solve them in any order.
+They will also have access to descriptions of the key functions they will be working with (e.g. {\tt first, rest, map}) and short
+usage examples. 
+%\emcomment{show an example of a fragment}
+
+The study has 14 questions, divided into 4 levels. 
+Every participant will get a randomly selected half of the questions at each level in Clojure, and half in Racket. 
+All participants will get a brief review of Racket features first, then they will solve Racket problems. When the time expires on Racket questions, 
+they will get a brief overview of Clojure, and then work on their Clojure questions. 
+The work on the questions will be limited to 20 minutes for each of the two languages. 
+They may not switch between the languages. 
+Additionally to randomly selecting Clojure and Racket subsets of questions, each participant will either get original Clojure
+errors (Java exceptions), or our modified Clojure errors. 
+This would allow us to compare our system to both the original Clojure errors and to Racket. 
+Our system will be taking screen shots every few seconds to record the participants' attempts. 
+
+Testing will be followed by a brief ``interview'' at the end to get subjective feedback about participants' experience. 
+Questions for the interview would be along the lines of:  "What part of the tasks were easy for you? What parts were hard?".
+
+
+
+	%\subsection{Experimental Setup}\label{sec:setup}
 	
 %\thcomment{I did not put the following line here, is someone missing this?}
 %properly because of the limitations of the Java virtual machine.
 	   
 
 
-\subsubsection{Languages overview}\label{subsec:overview}
+%\subsubsection{Languages overview}\label{subsec:overview}
+%
+%The study is split into two main parts: Racket review and testing, and a brief overview of Clojure and testing.
+%The goal of each section is to introduce the two languages' basic functionality and then test the participants ability to correct mistakes in that language.
+%Testing is followed by a brief ``interview'' at the end. 
+%The overall purpose of each instructional session is to ensure that the participants have enough fundamental knowledge of the language presented to them to have a basic understanding of the problems. 
+%In addition, the session should also ensure a relatively similar level of familiarity with both Clojure and Racket among all participants. 
+%Each participant in the study will go through the process of reviewing and testing individually in order to minimize outside influence from other participants or distractions. 
+%Because of this, the participant's experiences must be parallel with each other both in terms of the environment and the materials provided such as not to create bias.
+%The Racket review section will be a reintroduction to participants, as they should already have a base knowledge of Racket from previous courses taken.
+%The participants should have little or no knowledge of Clojure when coming into the study, so the Clojure lesson will focus more on drawing similarities from Racket and basic function explanations.
+%The core topics to cover for each language are syntax (such as the prefix notation), higher order functions, function definitions, and recursion.
+%This part will consist of a brief writeup with examples. The Clojure writeup will assume familiarity with Racket and will highlight the differences. 
+%
+%\subsubsection{Testing}\label{subsec:testing}
+%
+%After the overview the participants will be assigned to a computer where their actions will be monitored by a reviewer. 
+%From here, they will be directed to connect to a website we have constructed that will present them with a series of problems to solve. 
+%Participants will not be allowed to consult outside sources, the reviewer, or other participants during this period of the study except for the language's public API for Racket and Clojuredocs for Clojure.
+%The participants will also have access to Racket's built-in IDE for Racket questions and to a project in the LightTable code editor for the Clojure questions. 
+%
+%The website they connect to pulls its questions from a set of parallel questions between Clojure and Racket we have constructed, so that for every question in Racket there is an equivalent question in Clojure and vice-versa.
+%Each question pair has a difficulty rating associated with it, with 1 being the easiest questions and 5 being the hardest.
+%When a new participant logs into the website, it constructs both the Racket and Clojure tests to present by randomly selecting question-pairs from the pool and adding the version of that question that corresponds to the language the test is in. 
+%The program iterates over every question in the pool and adds approximately equivalent amounts of questions from each level of difficulty level to each of the two tests.
+%	The participants will be allocated a time limit of 20 minutes to answer the questions in each language. 
+%They are allowed to try as many times as needed on each questions and they are allowed to skip past questions with the possibility of coming back to them later on. 
+%
+%Before taking their Clojure test each participant will  be assigned to receive either Clojure's default error messages or our custom Clojure error messages.
+%While testing, the computer will take a screenshot periodically, and the reviewer will take notes on what the participant does while solving the problems.
+%Screenshots in which there are no changes in screen state will be discarded. 
+%Each session will result in a series of screenshots and a short ``script'' of the participant's actions with timestamps in minutes and seconds since the beginning of the test, e.g. ``At 1:12 ran the program, got a message \texttt{Cannot convert 2 to a function}, at 1:45 switched the order of the function parameters'', etc.
+%After the finishing all of the questions, the participant will be asked a series of questions related to the tests such as, "What part of the tasks were easy for you? What parts were hard?".
+%Understanding each participants problem solving process will be based in both the notes and screenshots taken.
 
-The study is split into two main parts: Racket review and testing, and a brief overview of Clojure and testing.
-The goal of each section is to introduce the two languages' basic functionality and then test the participants ability to correct mistakes in that language.
-Testing is followed by a brief ``interview'' at the end. 
-The overall purpose of each instructional session is to ensure that the participants have enough fundamental knowledge of the language presented to them to have a basic understanding of the problems. 
-In addition, the session should also ensure a relatively similar level of familiarity with both Clojure and Racket among all participants. 
-Each participant in the study will go through the process of reviewing and testing individually in order to minimize outside influence from other participants or distractions. 
-Because of this, the participant's experiences must be parallel with each other both in terms of the environment and the materials provided such as not to create bias.
+\subsection{Data evaluation}\label{subsec:evaluation}
 
-The Racket review section will be a reintroduction to participants, as they should already have a base knowledge of Racket from previous courses taken.
-The participants should have little or no knowledge of Clojure when coming into the study, so the Clojure lesson will focus more on drawing similarities from Racket and basic function explanations.
-The core topics to cover for each language are syntax (such as the prefix notation), higher order functions, function definitions, and recursion.
-This part will consist of a brief writeup with examples. The Clojure writeup will assume familiarity with Racket and will highlight the differences. 
-
-\subsubsection{Testing}\label{subsec:testing}
-
-After the overview the participants will be assigned to a computer where their actions will be monitored by a reviewer. 
-From here, they will be directed to connect to a website we have constructed that will present them with a series of problems to solve. 
-Participants will not be allowed to consult outside sources, the reviewer, or other participants during this period of the study except for the language's public API for Racket and Clojuredocs for Clojure.
-The participants will also have access to Racket's built-in IDE for Racket questions and to a project in the LightTable code editor for the Clojure questions. 
-
-The website they connect to pulls its questions from a set of parallel questions between Clojure and Racket we have constructed, so that for every question in Racket there is an equivalent question in Clojure and vice-versa.
-Each question pair has a difficulty rating associated with it, with 1 being the easiest questions and 5 being the hardest.
-When a new participant logs into the website, it constructs both the Racket and Clojure tests to present by randomly selecting question-pairs from the pool and adding the version of that question that corresponds to the language the test is in. 
-The program iterates over every question in the pool and adds approximately equivalent amounts of questions from each level of difficulty level to each of the two tests.
-	The participants will be allocated a time limit of 20 minutes to answer the questions in each language. 
-They are allowed to try as many times as needed on each questions and they are allowed to skip past questions with the possibility of coming back to them later on. 
-
-Before taking their Clojure test each participant will  be assigned to receive either Clojure's default error messages or our custom Clojure error messages.
-While testing, the computer will take a screenshot periodically, and the reviewer will take notes on what the participant does while solving the problems.
-Screenshots in which there are no changes in screen state will be discarded. 
-Each session will result in a series of screenshots and a short ``script'' of the participant's actions with timestamps in minutes and seconds since the beginning of the test, e.g. ``At 1:12 ran the program, got a message \texttt{Cannot convert 2 to a function}, at 1:45 switched the order of the function parameters'', etc.
-After the finishing all of the questions, the participant will be asked a series of questions related to the tests such as, "What part of the tasks were easy for you? What parts were hard?".
-Understanding each participants problem solving process will be based in both the notes and screenshots taken.
-
-\subsubsection{Data evaluation}\label{subsec:evaluation}
-
-After the question period of the study, we will now have a collection of screen captures from each participant detailing the process solving the problems, notes on their problem solving process, and participant opinion on the challenges of the study.
-From these we can begin to gauge the significance of the error messages in their problem solving processes. 
+After the question period of the study, we will have a collection of screen captures from each participant detailing the process solving the problems, notes on their problem solving process, and participant opinion on the challenges of the study.
+%From these we can begin to gauge the significance of the error messages in their problem solving processes. 
 Numerical data (the number and the level of the solved problems, total time until correct solutions, the number of edits towards the right solution vs those leading away) will be processed statistically. 
+The questions at the end would allow us to gauge how the messages are perceived.%, and whether this correlates with their actual usefulness. 
+%A positive correlation would be useful to know for future research, allowing us to rely on participants' feedback. 
+%Lack of such correlation would mean that participants' perception may be skewed by other factors (the IDE, the familiarity of the language or a lack thereof, etc.).  
+%and should not be used for future evaluation.  
 
-The questions at the end would allow us to gauge how the messages are perceived, and whether this correlates with their actual usefulness. A positive correlation would be useful to know for future research, allowing us to rely on participants' feedback. 
-Lack of such correlation would mean that participants' perception is unreliable and should not be used for future evaluation.  
-
-\section{Principles of Question Selection}\label{sec:select}
-	Selecting questions for the study was a challenging process since every question must make sense in both Racket and Clojure and not require an involved introduction. Below we detail our approach to question selection.
-
-	\subsection{Selecting Meaningful Accessible Questions}\label{sec:meaning}
+\subsection{Question selection}\label{sec:select}
+	Selecting questions for the study was a challenging process since every question must make sense in both Racket and Clojure and not require an involved introduction. %Below we detail our approach to question selection.
+	%\subsection{Selecting Meaningful Accessible Questions}\label{sec:meaning}
 	When putting together questions for the study, we followed the following principles:
 	\begin{itemize}
-	\item The code examples should be simple enough to understand the programmer's intent with just a few test examples. 
+	\item The code examples should be simple enough to understand the  intent with just a few test examples. 
 	\item The code examples must have mistakes that a beginner programmer would make. Examples include switched arguments of a function or a mistyped identifier. 
-	\item There must be a simple fix for an error. This is challenging since some errors, such as s type mismatch, can be caused by a variety of issues, and a beginner
-	programmer can easily start making changes that are more complicated than they need to be, in an attempt to match the types. 
-	\item Code examples and tests must use the same simple set of features in Racket and in Clojure. For instance, Racket uses a function \texttt{check-expect} for testing. Clojure also has a similar library (expectations), but it is more convoluted. Thus in order to equalize the experience in the two languages we chose to use only = and \texttt{equals?} function for testing since they are the same in the two languages. 
+	\item There must be a simple fix for an error, otherwise  a beginner
+	programmer can start making complicated changes and cause further errors or just spend more time than intended.  %, in an attempt to match the types.
+%This is challenging since some errors, such as a type mismatch, can be caused by a variety of issues
+%, and a beginner
+	%programmer can easily start making changes that are more complicated than they need to be, in an attempt to match the types. 
+	\item Code examples and tests must use the same simple set of features in Racket and in Clojure. This prevents us from using \texttt{check-expect} in Racket since the equivalent Clojure library requires a longer introduction than we can afford. 
+%For instance, Racket uses a function \texttt{check-expect} for testing. Clojure also has a similar library (expectations), but it is more convoluted. Thus in order to equalize the experience in the two languages we chose to use only = and \texttt{equals?} function for testing since they are the same in the two languages. 
 	\end{itemize}
+As an example of a question, consider Racket code example: 
+\begin{verbatim}
+		(define (my-length elements)
+  			(if (empty? elements) 0 (+ 1 (my-length (first elements)))))
+\end{verbatim}
+Here {\tt first} is erroneously used instead of {\tt rest}. The Clojure example is almost identical, with the difference in the syntax of a function definition: 
+\begin{verbatim}
+		(defn my-length [elements]
+ 			 (if (empty? elements) 0 (+ 1 (my-length (first elements)))))
+\end{verbatim}
+Test examples given to students demonstrate several cases of length: 
+\begin{verbatim}
+		(= (my-length '(5 4 3 2 1)) 5)
+		(= (my-length '()) 0)
+\end{verbatim}
+The original Clojure error message is: 
+\begin{verbatim}
+		IllegalArgumentException Don't know how to create ISeq from: java.lang.Long 
+\end{verbatim}
+The Racket error is {\tt first: expects a non-empty list; given: 5}, whereas our error is somewhat more verbose: 
+{\tt In function {\bf first}, the first argument 5 must be a sequence but is a number.}
 
 
-	\subsection{Question Parallelism}\label{sec:parallel}
+%	\subsection{Question Parallelism}\label{sec:parallel}
 	
-	One of the overarching themes of this study was the difficulty in creating questions that had similar meaning, errors, and syntax in both Clojure and Racket. 
-	Often, our questions are somewhat less than idiomatic because of the constraints imposed by the short time commitment we intended for the study.
-	For instance, we only use lists in our questions, where idiomatic Clojure prefers vectors, which combine the best features of arrays and lists.
-	 Reducing the amount of review and potential sources of confusion was paramount; For instance, Clojure doesn't support tail recursion properly because of the limitations of the Java virtual machine.
-	 In order to create tail-recursive structures, idiomatic Clojure uses a construct called loop recur to bypass this limitation.
-	 Loop recur has complex syntax and semantics, and so our questions avoid the use of Loop recur, despite the fact that it is idiomatic. 
-	 The gap between idiomatic code and testable code is wide, but avoiding complex features is a good start. %\hfcomment{Cond?}
+%	One of the overarching themes of this study was the difficulty in creating questions that had similar meaning, errors, and syntax in both Clojure and Racket. 
+%	Often, our questions are somewhat less than idiomatic because of the constraints imposed by the short time commitment we intended for the study.
+%	For instance, we only use lists in our questions, where idiomatic Clojure prefers vectors, which combine the best features of arrays and lists.
+%	 Reducing the amount of review and potential sources of confusion was paramount; For instance, Clojure doesn't support tail recursion properly because of the limitations of the Java virtual machine.
+%	 In order to create tail-recursive structures, idiomatic Clojure uses a construct called loop recur to bypass this limitation.
+%	 Loop recur has complex syntax and semantics, and so our questions avoid the use of Loop recur, despite the fact that it is idiomatic. 
+%	 The gap between idiomatic code and testable code is wide, but avoiding complex features is a good start. %\hfcomment{Cond?}
 
 \subsection{Conclusions and future work}\label{sec:future}
 
