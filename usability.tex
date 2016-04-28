@@ -42,20 +42,29 @@ TBD
 \end{abstract}
 
 \section{Introduction}\label{sec:intro}
+Error messages are the primary form of response that programmers get from malfunctioning programs. 
+Experienced programmers have the background to understand what error messages actually mean, but novices only have the content of the error message. 
+While interactions with errors in a programming language are an essential part of a programmer's experience, quite often error handling in a language is not very well thought through: 
+error messages use inconsistent terminology, are ambiguous or misleading, and do not provide enough detail. 
+%Beginner programmers find error messages unhelpful.
+%Anecdotal evidence (informal questioning of about 10 CS students and almuni by the authors) indicates that novice programmers often do not even realize that an error message may contain useful information, except perhaps the line number; some ignore these messages entirely. 
+%This observation is consistent with the general programming languages community undervaluing of error messages quality. 
+There has been very little formal study of usability of error messages for beginners, and very little methodology developed for such studies. The notable exception is the development and study of beginner-friendly error messages in the Racket programming language \cite{Marceau:2011,Marceau:2011-2}. 
 
 \section{Towards teaching Clojure in an introductory class}\label{sec:project}
 \emcomment{Some of this may move to intro}
 Languages in the Lisp family have a long history of being a successful first programming language for college-level students.
 The famous Abelson and Sussman textbook~\cite{Abelson} had been used in numerous introductory courses.
-In the recent years Python replaced Lisp/Scheme in this role to a large degree, but 
-Felleisen et al make an excellent case for starting CS education with a functional language~\cite{Felleisen:2004}.   
+In the recent years Python replaced Lisp/Scheme as a first beginners' language to a large degree. However, 
+Felleisen et al made an excellent case for using a functional language as a first language in  CS education~\cite{Felleisen:2004}.   
 Functional languages tend to have simpler, more uniform syntax and semantics that students master quickly.
 They focus on functional abstraction, modularity, generalization, and recursion -- concepts that are essential for computer science methods of 
 problem solving and a structural, systematic approach to software development. 
-Lisp Read-Eval-Print Loop (REPL) provides an opportunity to test code interactively as it's being developed. 
+Lisp Read-Eval-Print Loop (REPL) provides an opportunity to test code interactively as it is being developed. 
 Lisps have been successfully used in introductory languages in many computer science college programs, including UMM: 
-one of our introductory classes for CS majors and minors uses Racket programming language~\cite{htdp,htdp2} (the other,
-equivalent, one uses Python). 
+one of our introductory classes for CS majors and minors uses Racket programming language~\cite{htdp,htdp2}. 
+%(the other,
+%equivalent, one uses Python). 
 
 Clojure is a relatively new addition to the Lisp language family. Released in 2007 by Rich Hickey~\cite{Hickey:2008}, it has rapidly gained popularity in industry
 and in a wider programming community 
@@ -82,9 +91,26 @@ but it is easy to present a completely immutable subset of the language to begin
 The language provides a rich system of predefined collection: lists, vectors, hash maps, and set, to name the 
 most common ones. Many functions that work on collections return lazy sequences: sequences that are not evaluated 
 until they are needed, and only the needed portion is evaluated. 
- 
 
 \subsection{Challenges}\label{subsec:challenges}
+One of the main challenges in using Clojure as a language for beginner programmers is its error messages. 
+Since Clojure is a dynamically typed language that runs on the JVM, most of its errors
+are runtime and manifest themselves as Java exception.
+For instance, an attempt to apply {tt first} to a number, such as {(first 3)}, 
+would result in a type mismatch between the expected type (a sequence or a type that can be converted to a sequence) 
+and the actual type, which is a number. A general Clojure sequence type  is represented in Java as 
+{\tt ISeq}, and integer numbers are, by default, stored as the (boxed) type {\tt Long}. Thus the error message becomes
+\begin{verbatim}
+Exception in thread "main" java.lang.IllegalArgumentException:
+Don't know how to create ISeq from: java.lang.Long
+\end{verbatim}
+Beginners do not know what {\tt IllegalArgumentException} or the other two types mentioned in the message are, and have no
+way of matching them to the context of their program. 
+
+To make the matters worse, the error comes with a very long (several dozens of lines) Java stack trace, primarily consisting of internal 
+representation of Clojure functions and setup, not any of the code that the programmer actually wrote. 
+
+
 
 \emcomment{mention IDE, in addition to the error messages}
 
