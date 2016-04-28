@@ -38,7 +38,21 @@ Thomas Hagen
 \maketitle
 
 \begin{abstract}
-TBD
+Clojure is a fairly recent addition to the Lisp family of programming languages that is gaining significant 
+popularity in the programming community. 
+As a Lisp, it is well suited to be used in an introductory computer science class. 
+However, error messages in Clojure come from the underlying Java runtime environment, thus using Java data types and terminology. This presents a 
+significant barrier for beginners. 
+Our work focuses on developing beginner-oriented error messages for the Clojure programming language. 
+The current stage of our project is evaluation of usability of our alternative system of Clojure error messages 
+for beginners. 
+We have developed a usability study that would allow us to compare our error messages to both 
+original Clojure and to Racket error messages. The latter is especially important since 
+Racket was developed specifically with beginners in mind, and thus provides 
+an inspiring benchmark to compare to. 
+Our usability study is wrapping up its development stage, but has not yet been conducted.
+In this work we present its setup and the principles that 
+we have developed in order to put it together.   
 \end{abstract}
 
 \section{Introduction}\label{sec:intro}
@@ -60,10 +74,10 @@ The famous Abelson and Sussman textbook~\cite{Abelson} had been used in numerous
 In the recent years Python replaced Lisp/Scheme as a first beginners' language to a large degree. However, 
 Felleisen et al made an excellent case for using a functional language as a first language in  CS education~\cite{Felleisen:2004}.   
 Functional languages tend to have simpler, more uniform syntax and semantics that students master quickly.
-They focus on functional abstraction, modularity, generalization, and recursion -- concepts that are essential for computer science methods of 
+They focus on functional abstraction, modularity, polymorphism, and recursion -- concepts that are essential for computer science methods of 
 problem solving and a structural, systematic approach to software development. 
-Lisp Read-Eval-Print Loop (REPL) provides an opportunity to test code interactively as it is being developed. 
-Lisps have been successfully used in introductory languages in many computer science college programs, including UMM: 
+%Lisp Read-Eval-Print Loop (REPL) provides an opportunity to test code interactively as it is being developed. 
+Lisps have been successfully used in introductory languages in many computer science college programs, including University of Minnesota - Morris (UMM): 
 one of our introductory classes for CS majors and minors uses Racket programming language~\cite{htdp,htdp2}. 
 %(the other,
 %equivalent, one uses Python). 
@@ -90,8 +104,10 @@ system. We discuss implications of this implementation in Section~\ref{subsec:ch
 
 Like all Lisp, Clojure is dynamically typed. This has an advantage that beginners do not need to worry about type declarations
 for variables and functions, and it is easy to write polymorphic functions. 
-Data is immutable by default; there are several built-in mutable data types that support various concurrency models, 
-but it is straightforward to present a completely immutable subset of the language to beginners. 
+Data is immutable by default, except for separate built-in data types for concurrency support that can be easily 
+excluded from beginners' usage. 
+%; there are several built-in mutable data types that support various concurrency models, 
+%but it is straightforward to present a completely immutable subset of the language to beginners. 
 Clojure provides a rich system of predefined collections: lists, vectors, hash maps, and sets, to name the 
 most common ones. Many functions that work on collections return lazy sequences: sequences that are not evaluated 
 until they are needed, and only the needed portion is evaluated. This allows for use of infinite ranges and similar infinite 
@@ -114,13 +130,12 @@ way of matching them to the context of their program.
 
 To make the matters worse, the error comes with a very long (several dozens of lines) Java stack trace, primarily consisting of internal 
 representation of Clojure functions and setup, not any of the code that the programmer actually wrote. 
-
 Another barrier in Clojure adoption by beginners is a lack of a commonly accepted beginner-friendly IDE, although
 a few recent developments, e.g. Nightcode by Zack Oakes~\cite{nightcode},  look promising in this regard. 
 
 In the recent years Clojure community has become much more active in making error messages clearer for all users. 
-In particular, several tools and IDEs filter Java stack trace to remove information from packages that are clearly not useful to
-the users. The wording of some previously confusing and misleading error messages has been improved. 
+Several tools and IDEs filter Java stack trace to remove information that is clearly not useful to
+users. The wording of some previously confusing and misleading error messages has been improved. 
 There has been a substantial effort on improving error reporting for macros~\cite{fleming}. 
 However, these efforts do not directly address difficulties that beginner programmers 
 have with error messages being phrased in terms of Java, and not of Clojure. One of the 
@@ -174,9 +189,9 @@ In function {\bf first}, the first argument 3 must be a sequence but is a number
 }
 
 %\noindent
-Note that {\tt first} is an overwritten function, thus we are able to report that the argument is {\tt 3}. 
-We cannot report the argument values for user-defined functions without interfering with Clojure
-implementation or an IDE. 
+%Note that {\tt first} is an overwritten function, thus we are able to report that the argument is {\tt 3}. 
+%We cannot report the argument values for user-defined functions without interfering with Clojure
+%implementation or an IDE. 
 
 {\bf Incorrect arity.}
 Consider a user's attempt to call a function {\tt even?} with more than one argument: {\tt (even? 3 6 1)}
@@ -211,7 +226,7 @@ Our version of the error is:
 \begin{verbatim}
 Cannot call nil as a function.
 \end{verbatim}
-Note that since {tt nil} is iits own type, it is easy to detect without causing a much less informative null pointer exception. 
+Note that since {\tt nil} is its own type, it is easy to detect its usage without causing a much less informative null pointer exception. 
 % in this case we are aided by Clojure providing a special error message for using {\tt nil} in a function position. In other cases, 
 %such as passing {\tt nil} as an argument, where a number or a string were expected, we are able to detect {\tt nil} by its type, since it is
 %a type of its own.  
@@ -261,30 +276,30 @@ Note that since {tt nil} is iits own type, it is easy to detect without causing 
 Anecdotal evidence (primarily our own work in the system with the new error messages) shows that 
 in many cases we are able to report errors accurately and in a wording that does not require 
 knowledge of Java. However, in order to assess how well the error messages work for beginner 
-programmers, we need to conduct a usability study. Some questions we would like to answer. 
-The approach by Marceau et al~\cite{Marceau:2011} is to measure whether an error message 
+programmers, we need to conduct a usability study. 
+We adapt an the approach by Marceau et al~\cite{Marceau:2011}, which is to measure whether an error message 
 leads a student in the direction of a correct edit, or away from it. 
 
 One of the obvious comparison points is the original Clojure error messages. However, given that 
 a lot of UMM students have experience with Racket, we have designed a study that would allow us 
-to compare our error messages to those in Racket. 
+to also compare our error messages to those in Racket. 
 The two languages are quite similar, and since we
 cannot teach our study subjects Clojure in the process of the study due to time constraints, we are 
 limited to the features of Clojure that closely parallel Racket. 
-Since Racket has been designed with focus on beginner programmers' experience,
-it is a great comparison point for our error messages. 
+Since Racket has been specifically designed with focus on beginner programmers' experience,
+it is a great benchmark for our error messages. 
 
 The results of the study would point out whether our transformed error messages are helpful to beginner 
 programmers. 
 Since participants may introduce further errors while trying to correct the fragments they are given, 
 the study would allow us to detect cases of errors outside of the directly prepared scope, and thus
-will serve as a testing ground for robustness of our system.  
+will also serve as a testing ground for robustness of our system.  
 While we have mostly completed the development of the study questions and the setup, the
 study has not been conducted. We expect to complete it by the end of May 2016. 
 
 The participants for the study are volunteer UMM students (first year and sophomores) who have taken the introductory computer science course in Racket and have no, or very little, experience with Clojure.
 Participants will be recruited via the CS department mailing list, as well as via email and short presentations in freshmen and sophomore level CS classes. 
-In order to attract a larger and more diverse student population for the study, students will receive a small financial compensated for their time, thanks to a gift from Cognitect, Inc. 
+In order to attract a larger and more diverse student population for the study, students will receive a small financial compensation for their time, thanks to a gift from Cognitect, Inc. 
 The study is exempt from full IRB review. 
 
 \subsection{The study setup}\label{sec:setup}
@@ -292,10 +307,10 @@ The study is exempt from full IRB review.
 The usability study that we have developed is structured around ``parallel questions'': erroneous fragments that are very similar in 
 Racket and Clojure. Each question will present an erroneous code fragment and test cases that show the intent of the fragment. 
 Participants will be asked to fix the fragment to make the tests pass.
-General principles of questions selection, as well as an example of a question, are given in Section~\ref{sec:select}.
+%General principles of questions selection, as well as an example of a question, are given in Section~\ref{sec:select}.
  They can browse the questions and solve them in any order.
-They will also have access to descriptions of the key functions they will be working with (e.g. {\tt first, rest, map}) and short
-usage examples. 
+They will be able to use descriptions and examples of the key functions they will be working with (e.g. {\tt first, rest, map}). %and short
+%usage examples. 
 %\emcomment{show an example of a fragment}
 
 The study has 14 questions, divided into 4 levels. 
@@ -306,7 +321,7 @@ The work on the questions will be limited to 20 minutes for each of the two lang
 They may not switch between the languages. 
 Additionally to randomly selecting Clojure and Racket subsets of questions, each participant will either get original Clojure
 errors (Java exceptions), or our modified Clojure errors. 
-This would allow us to compare our system to both the original Clojure errors and to Racket. 
+%This would allow us to compare our system to both the original Clojure errors and to Racket. 
 Our system will be taking screen shots every few seconds to record the participants' attempts. 
 
 Testing will be followed by a brief ``interview'' at the end to get subjective feedback about participants' experience. 
@@ -358,10 +373,11 @@ Questions for the interview would be along the lines of:  "What part of the task
 
 \subsection{Data evaluation}\label{subsec:evaluation}
 
-After the question period of the study, we will have a collection of screen captures from each participant detailing the process solving the problems, notes on their problem solving process, and participant opinion on the challenges of the study.
+For every participant we will have a collection of screen captures detailing their process of solving the problems, notes from an observer, and participant opinion on the challenges of the study.
 %From these we can begin to gauge the significance of the error messages in their problem solving processes. 
-Numerical data (the number and the level of the solved problems, total time until correct solutions, the number of edits towards the right solution vs those leading away) will be processed statistically. 
-The questions at the end would allow us to gauge how the messages are perceived.%, and whether this correlates with their actual usefulness. 
+Numerical data (the number and the level of the solved problems, total time until correct solutions, the number of edits towards the right solution vs those leading away) will be analyzed statistically. 
+The questions at the end would allow us to gauge how the messages are perceived subjectively.
+%, and whether this correlates with their actual usefulness. 
 %A positive correlation would be useful to know for future research, allowing us to rely on participants' feedback. 
 %Lack of such correlation would mean that participants' perception may be skewed by other factors (the IDE, the familiarity of the language or a lack thereof, etc.).  
 %and should not be used for future evaluation.  
@@ -372,7 +388,7 @@ The questions at the end would allow us to gauge how the messages are perceived.
 	When putting together questions for the study, we followed the following principles:
 	\begin{itemize}
 	\item The code examples should be simple enough to understand the  intent with just a few test examples. 
-	\item The code examples must have mistakes that a beginner programmer would make. Examples include switched arguments of a function or a mistyped identifier. 
+	\item The code examples must have mistakes that a beginner programmer would make, such as switched arguments of a function or a mistyped identifier. 
 	\item There must be a simple fix for an error, otherwise  a beginner
 	programmer can start making complicated changes and cause further errors or just spend more time than intended.  %, in an attempt to match the types.
 %This is challenging since some errors, such as a type mismatch, can be caused by a variety of issues
@@ -391,7 +407,7 @@ Here {\tt first} is erroneously used instead of {\tt rest}. The Clojure example 
 		(defn my-length [elements]
  			 (if (empty? elements) 0 (+ 1 (my-length (first elements)))))
 \end{verbatim}
-Test examples given to students demonstrate several cases of length: 
+Test examples given to students demonstrate the programmer's intent: 
 \begin{verbatim}
 		(= (my-length '(5 4 3 2 1)) 5)
 		(= (my-length '()) 0)
@@ -414,7 +430,13 @@ The Racket error is: {\tt first:expects a non-empty list; given:5}. Our error is
 %	 Loop recur has complex syntax and semantics, and so our questions avoid the use of Loop recur, despite the fact that it is idiomatic. 
 %	 The gap between idiomatic code and testable code is wide, but avoiding complex features is a good start. %\hfcomment{Cond?}
 
-\subsection{Conclusions and future work}\label{sec:future}
+\section{Conclusions and future work}\label{sec:future}
+We have implemented beginner-oriented error messages in Clojure and developed a usability study to assess their usefulness to beginners,
+compared to the original Clojure messages and to Racket. Our future work includes conducting the study (expected to be concluded in  May 2016), improving our messages based on the results,  
+and integrating our error messages into an IDE or packaging them as a library. 
+%Our ultimate goal is to test the error messages with a group of Clojure learners as a part of an introductory class. 
+%However, the system needs to be well-tested and integrated into a development environment first. 
+
 
 \bibliographystyle{eptcs}
 \bibliography{usability}
