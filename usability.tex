@@ -49,7 +49,9 @@ error messages use inconsistent terminology, are ambiguous or misleading, and do
 %Beginner programmers find error messages unhelpful.
 %Anecdotal evidence (informal questioning of about 10 CS students and almuni by the authors) indicates that novice programmers often do not even realize that an error message may contain useful information, except perhaps the line number; some ignore these messages entirely. 
 %This observation is consistent with the general programming languages community undervaluing of error messages quality. 
-There has been very little formal study of usability of error messages for beginners, and very little methodology developed for such studies. The notable exception is the development and study of beginner-friendly error messages in the Racket programming language \cite{Marceau:2011,Marceau:2011-2}. 
+There has been very little formal study of usability of error messages for beginners, and very little methodology developed for such studies. The notable exception is the development and study of beginner-friendly error messages in the Racket programming language \cite{Marceau:2011,Marceau:2011-2}.
+
+\emcomment{mention Racket, mention comparison} 
 
 \section{Towards teaching Clojure in an introductory class}\label{sec:project}
 \emcomment{Some of this may move to intro}
@@ -70,29 +72,32 @@ Clojure is a relatively new addition to the Lisp language family. Released in 20
 and in a wider programming community 
 due to its elegant design and suitability for concurrent programming. A very active open source Clojure community has developed numerous 
 libraries for a diverse set of applications, from web development to data processing. 
+Clojure community has an excellent set of community maintained documentation (with examples), tutorials, 
+self-guided exercises, and very active beginner-welcoming online forums.
 
 Our project aims at creating a setup for using Clojure in an introductory CS class. Clojure was designed with experienced programmers in mind, 
 and using it as a first programming language presents challenges. Our goal is to develop ways to support beginner-friendly Clojure interactions. 
 
 \subsection{Overview of Clojure}\label{subsec:clojure}
-
-\emcomment{Features: JVM, data structures, dynamic types -- not in this order, probably}
+%
+%\emcomment{Features: JVM, data structures, dynamic types -- not in this order, probably}
 Unlike other Lisps that come with their own interpreter that was developed just for their own dialect, Clojure is compiled 
 into Java bytecode and runs on the Java virtual machine (JVM). This provides the benefits of compatibility with 
 any platform that supports Java, the ability to use any Java library, and the opportunity to take advantage of Java 
 garbage collection and runtime optimizations. However, this also presents a challenge since the underlying Java 
 runtime environment operates with Java types, and Clojure error messages come directly from the Java runtime
-system. We discuss implications of this design decision in Section~\ref{subsec:challenges}.
+system. We discuss implications of this implementation in Section~\ref{subsec:challenges}.
 
 Like all Lisp, Clojure is dynamically typed. This has an advantage that beginners do not need to worry about type declarations
 for variables and functions, and it is easy to write polymorphic functions. 
-Data is immutable by default: there are several built-in data types that support various concurrency models, 
-but it is easy to present a completely immutable subset of the language to beginners. 
-The language provides a rich system of predefined collection: lists, vectors, hash maps, and set, to name the 
+Data is immutable by default; there are several built-in mutable data types that support various concurrency models, 
+but it is straightforward to present a completely immutable subset of the language to beginners. 
+Clojure provides a rich system of predefined collections: lists, vectors, hash maps, and sets, to name the 
 most common ones. Many functions that work on collections return lazy sequences: sequences that are not evaluated 
-until they are needed, and only the needed portion is evaluated. 
+until they are needed, and only the needed portion is evaluated. This allows for use of infinite ranges and similar infinite 
+constructs. 
 
-\subsection{Challenges}\label{subsec:challenges}
+\subsection{Challenges for beginners}\label{subsec:challenges}
 One of the main challenges in using Clojure as a language for beginner programmers is its error messages. 
 Since Clojure is a dynamically typed language that runs on the JVM, most of its errors
 are runtime and manifest themselves as Java exception.
@@ -110,11 +115,17 @@ way of matching them to the context of their program.
 To make the matters worse, the error comes with a very long (several dozens of lines) Java stack trace, primarily consisting of internal 
 representation of Clojure functions and setup, not any of the code that the programmer actually wrote. 
 
+Another barrier in Clojure adoption by beginners is a lack of a commonly accepted beginner-friendly IDE, although
+a few recent developments, e.g. Nightcode by Zack Oakes~\cite{nightcode},  look promising in this regard. 
 
-
-\emcomment{mention IDE, in addition to the error messages}
-
-\emcomment{multiple types for the same thing; a bit of type confusion due to the same elements implementing different interfaces}
+In the recent years Clojure community has become much more active in making error messages clearer for all users. 
+In particular, several tools and IDEs filter Java stack trace to remove information from packages that are clearly not useful to
+the users. The wording of some previously confusing and misleading error messages has been improved. 
+There has been a substantial effort on improving error reporting for macros~\cite{fleming}. 
+However, these efforts do not directly address difficulties that beginner programmers 
+have with error messages being phrased in terms of Java, and not of Clojure. One of the 
+goals of our work is to bridge this gap by providing messages that do not require knowing
+Java, or any programming language other than Clojure. 
 
 \section{Error messages adapted for beginners}\label{sec:errors-work}
 \hfcomment{WORRRRRRRRRRRRRRRRRRRDS}
@@ -122,6 +133,8 @@ representation of Clojure functions and setup, not any of the code that the prog
 \subsection{Examples}
 Here are some examples of the error messages we've developed, and the original error messages. 
 The examples of original error messages have been limited in length; they always include a complete stack trace that is no shorter than fifty lines.
+
+\emcomment{multiple types for the same thing; a bit of type confusion due to the same elements implementing different interfaces}
 
 \subsubsection{Illegal argument}
 {\tt (first 3)}
