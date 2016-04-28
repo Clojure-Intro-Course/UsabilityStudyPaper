@@ -128,115 +128,139 @@ goals of our work is to bridge this gap by providing messages that do not requir
 Java, or any programming language other than Clojure. 
 
 \section{Error messages adapted for beginners}\label{sec:errors-work}
-\hfcomment{WORRRRRRRRRRRRRRRRRRRDS}
+Our approach to providing more beginner-friendly error messages consists of several parts:
+\begin{enumerate}
+\item Provide ``wrappers'' for most commonly used predefined functions that have preconditions
+for the arguments. For instance, {\tt map} must have a function as its first argument, a sequence 
+(or a type that can be turned into one, which can be checked with {\tt seqable} predicate) as its second argument, 
+and may contain more {\tt seqable}  arguments. Arguments that are violating pre-conditions are reported. 
+If all arguments type-check, the original Clojure function is called. 
+\item If the error is coming from a context other than our own pre-condition, we attempt to match the exception by its
+type, and then match its message via a regular expression. 
+\item In all cases we perform type substitution (replacing Java types by their simpler counterparts that are 
+understandable without knowing Java). For instance, {\tt java.lang.Long, java.lang.Number}, and
+{java.lang.Double} all are reported as just a {\tt number}. This is somewhat less straightforward than it seems since 
+some elements belong to multiple types in the type hierarchy. For instance, a Clojure keyword, such as {\tt :name}, is also a function, since 
+it can be applied as a selector to a hash map: {\tt (:name \{:name "Mary", :age 20\})}. We match more specific types first, and then moving towards 
+a more general ones. 
+\item For all error messages we also the stack trace to leave, in most cases, only the student's code and the Clojure core functions. 
+Our system allows customizable stack trace filtering (currently hard-coded, but can easily be controlled from the command line or via a 
+settings file or a menu). 
+\end{enumerate}
+%\hfcomment{WORRRRRRRRRRRRRRRRRRRDS}
+Below we show a few examples of error messages. For simplicity we are not including the stack traces. We are also not
+including the line number reporting since our messages just pass along the line information from the exception. 
 
-\subsection{Examples}
-Here are some examples of the error messages we've developed, and the original error messages. 
-The examples of original error messages have been limited in length; they always include a complete stack trace that is no shorter than fifty lines.
+%\subsection{Examples}
+%Here are some examples of the error messages we've developed, and the original error messages. 
+%The examples of original error messages have been limited in length; they always include a complete stack trace that is no shorter than fifty lines.
 
-\emcomment{multiple types for the same thing; a bit of type confusion due to the same elements implementing different interfaces}
+%\emcomment{multiple types for the same thing; a bit of type confusion due to the same elements implementing different interfaces}
 
-\subsubsection{Illegal argument}
-{\tt (first 3)}
+%\noindent
+{\bf Illegal argument. }
+The first example shows the error message for the code fragment we have discussed in Section~\ref{subsec:challenges}:  {\tt (first 3)}. 
+The original exception is as follows: 
 
-Here we attempt to take the first of a number:
 \begin{verbatim}
 Exception in thread "main" java.lang.IllegalArgumentException:
-Don't know how to create ISeq from:
-java.lang.Long, compiling:(/tmp/form-init143909617110072064.clj:1:72)
+Don't know how to create ISeq from: java.lang.Long
 \end{verbatim}
 
+\noindent
+Our system replaces it with:
 
-And our improved version of the error:
-\begin{verbatim}
-In function first, the first argument 3 must be a sequence but is a number.
-\end{verbatim}
+\noindent
+{\tt
+In function {\bf first}, the first argument 3 must be a sequence but is a number.
+}
 
-\subsubsection{Incorrect arity}
-{\tt (even? 3 6 1)}
+%\noindent
+Note that {\tt first} is an overwritten function, thus we are able to report that the argument is {\tt 3}. 
+We cannot report the argument values for user-defined functions without interfering with Clojure
+implementation or an IDE. 
 
-This example demonstrates arity exceptions on \texttt{even?}:
+{\bf Incorrect arity.}
+Consider a user's attempt to call a function {\tt even?} with more than one argument: {\tt (even? 3 6 1)}
+This triggers an arity exception:
 \begin{verbatim}
 Exception in thread "main" clojure.lang.ArityException:
-Wrong number of args (3) passed to:
-core/even?, compiling:(/tmp/form-init5079227190989845185.clj:1:73)
+Wrong number of args (3) passed to: core/even?
 \end{verbatim}
-And our improved version of the error:
+Our version of the error is:
 \begin{verbatim}
 You cannot pass three arguments to a function even?, need one.
 \end{verbatim}
 
-\subsubsection{Incorrect arity of a lambda}
-{\tt ((fn [ x y] (+ x y)) 2)}
-
-An anonymous function that takes two args and is given one:
+{\bf Incorrect arity of an anonymous function.} The following code fragment passes one argument instead of two to an anonymous function:
+{\tt ((fn [ x y] (+ x y)) 2)}. The original message is as follows (using an auto-generated identifier for the function): 
 \begin{verbatim}
 Exception in thread "main" clojure.lang.ArityException:
 Wrong number of args (1) passed to: 
-core/-main/fn--1012, compiling:(/tmp/form-init5193142143408385708.clj:1:73)
+core/-main/fn--1012
 \end{verbatim}
-And our improved version of the error:
+Our version of the error is:
 \begin{verbatim}
 You cannot pass one argument to this anonymous function.
 \end{verbatim}
+The error also reports the line number for the use of the anonymous function. 
 
-\subsubsection{Calling nil as a function}
-{\tt (nil 5)}
-
-The result of calling nil as a function:
+{\bf Calling nil as a function.} Often a value {\tt nil} is passed into a function position, causing an error. 
+The code fragment {\tt (nil 5)} generates the following error: 
 \begin{verbatim}
-Exception in thread "main" java.lang.IllegalArgumentException:
-Can't call nil, compiling:
-(amicable/core.clj:29:1)
+Exception in thread "main" java.lang.IllegalArgumentException: Can't call nil. 
 \end{verbatim}
-And our improved version of the error:
+Our version of the error is:
 \begin{verbatim}
 Cannot call nil as a function.
 \end{verbatim}
+Note that in this case we are aided by Clojure providing a special error message for using {\tt nil} in a function position. In other cases, 
+such as passing {\tt nil} as an argument, where a number or a string were expected, we are able to detect {\tt nil} by its type, since it is
+a type of its own.  
 
-\subsection{Stack filtering}
-We also filter the stack trace, removing portions that mention the compiler and internals of Clojure. For example, the stracktrace 
-
-\emcomment{Might need to shorten, move}
-
-\begin{verbatim}
-corefns.corefns/first (corefns.clj line 38)
-intro.may2015/eval8701 (may2015.clj line 48)
-clojure.lang.Compiler/eval (Compiler.java line 6792)
-clojure.lang.Compiler/load (Compiler.java line 7237)
-clojure.lang.Compiler/loadFile (Compiler.java line 7175)
-clojure.lang.RT$3/invoke (RT.java line 319)
-intro.core/-main (core.clj line 114)
-clojure.lang.RestFn/invoke (RestFn.java line 397)
-clojure.lang.Var/invoke (Var.java line 375)
-user/eval5 (form-init4829442094537982229.clj line 1)
-clojure.lang.Compiler/eval (Compiler.java line 6792)
-clojure.lang.Compiler/eval (Compiler.java line 6782)
-clojure.lang.Compiler/load (Compiler.java line 7237)
-clojure.lang.Compiler/loadFile (Compiler.java line 7175)
-clojure.main/load-script (main.clj line 275)
-clojure.main/init-opt (main.clj line 280)
-clojure.main/initialize (main.clj line 308)
-clojure.main/null-opt (main.clj line 343)
-clojure.main/main (main.clj line 421)
-\end{verbatim}
- 
-becomes 
-
-\begin{verbatim}
-corefns.corefns/first (corefns.clj line 38)
-intro.may2015/eval8701 (may2015.clj line 48)
-intro.core/-main (core.clj line 114)
-\end{verbatim} 
- 
-Which should be considerably better.
-\hfcomment{actually words here}
-\emcomment{Stack filtering}
+%\subsection{Stack filtering}
+%We also filter the stack trace, removing portions that mention the compiler and internals of Clojure. For example, the stracktrace 
+%
+%\emcomment{Might need to shorten, move}
+%
+%\begin{verbatim}
+%corefns.corefns/first (corefns.clj line 38)
+%intro.may2015/eval8701 (may2015.clj line 48)
+%clojure.lang.Compiler/eval (Compiler.java line 6792)
+%clojure.lang.Compiler/load (Compiler.java line 7237)
+%clojure.lang.Compiler/loadFile (Compiler.java line 7175)
+%clojure.lang.RT$3/invoke (RT.java line 319)
+%intro.core/-main (core.clj line 114)
+%clojure.lang.RestFn/invoke (RestFn.java line 397)
+%clojure.lang.Var/invoke (Var.java line 375)
+%user/eval5 (form-init4829442094537982229.clj line 1)
+%clojure.lang.Compiler/eval (Compiler.java line 6792)
+%clojure.lang.Compiler/eval (Compiler.java line 6782)
+%clojure.lang.Compiler/load (Compiler.java line 7237)
+%clojure.lang.Compiler/loadFile (Compiler.java line 7175)
+%clojure.main/load-script (main.clj line 275)
+%clojure.main/init-opt (main.clj line 280)
+%clojure.main/initialize (main.clj line 308)
+%clojure.main/null-opt (main.clj line 343)
+%clojure.main/main (main.clj line 421)
+%\end{verbatim}
+% 
+%becomes 
+%
+%\begin{verbatim}
+%corefns.corefns/first (corefns.clj line 38)
+%intro.may2015/eval8701 (may2015.clj line 48)
+%intro.core/-main (core.clj line 114)
+%\end{verbatim} 
+% 
+%Which should be considerably better.
+%\hfcomment{actually words here}
+%\emcomment{Stack filtering}
 
 \emcomment{Lazy sequences preview}
 
 \section{Design of usability study}\label{sec:study}
-	\thcomment{This is just the MICS section copied over}
+%	\thcomment{This is just the MICS section copied over}
 	
 	\subsection{Study participants}\label{sec:obj}
 The usability study that we have developed is structured around ``parallel questions'': erroneous fragments that are the same in 
