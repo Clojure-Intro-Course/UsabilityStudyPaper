@@ -1,8 +1,16 @@
 \documentclass{beamer}
-\usetheme{Montpellier}
-\usecolortheme{dolphin}
 \usepackage{color} %For Comments
 \usepackage{beamerthemeshadow}
+\mode<presentation>
+{
+\usetheme{Montpellier}
+\usecolortheme{dolphin}
+%%% set style for ovelays: lists (and other text) appearing one item at a time
+%%% This will create a dimmed preview of next item:
+%\setbeamercovered{transparent}
+%%% This will hide it entirely:
+\setbeamercovered{invisible}
+}
 
 %% Elena's favorite green (thanks, Fernando!)
 \definecolor{ForestGreen}{RGB}{34,139,34}
@@ -21,19 +29,18 @@
 
 \begin{document}
 \title{Usability of beginner-oriented Clojure error messages}
-\date{June 7, 2016}
+\author{Henry Fellows, Thomas Hagen, Sean Stockholm, 
+and Elena Machkasova}
+\institute[UMM] % (optional, but mostly needed)
+{
+ % \inst{1}%
+  University of Minnesota, Morris
+}
+\date{5th International Workshop on Trends in Functional Programming in Education, \\
+College Park, MD, June 7, 2016}
 
 \begin{frame}
-\frametitle{Usability of beginner-oriented Clojure error messages}
-{\centering
-\noindent
-Henry Fellows, Thomas Hagen, Sean Stockholm, \par
-and Elena Machkasova \par
-
-{\it 
-\par
-June 7, 2016\par}
-}
+\titlepage
 \end{frame}
 %frame
 
