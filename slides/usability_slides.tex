@@ -52,21 +52,65 @@ College Park, MD, June 7, 2016}
 \section{Clojure error messages}
 
 \begin{frame}
-\frametitle{Goals }
-\emcomment{Overview of the project, the current state}
+\frametitle{Clojure and goals of our project }
+Clojure:
+\begin{itemize}
+\item A Lisp, runs on the JVM
+\item Data immutable; state is handled explicitly 
+\item Support for concurrency 
+\item Rich collection of data structures (lists, vectors, hashmaps, sets,...)
+\item Developed by Rich Hickey, released in 2007
+\item Has a large community of users and developers 
+\end{itemize}
+
+A project at university from Minnesota, Morris (UMM) to make it possible to use Clojure as the first language for teaching beginner students. 
 \end{frame}
 
+\begin{frame}
+\frametitle{UMM course structure}
+UMM current course structure:
+\begin{itemize}
+\item Introductory: Racket or Python 
+\item Second programming course: Data Structures in Java
+\item Upper level classes use a variety of languages:  Javascript (web development), C, Ruby (operating systems),  R, Clojure (data processing). 
+\end{itemize} 
+Seeing a functional language first is helpful (functional abstraction, higher-order functions). 
+
+Students have no problem picking up new languages. 
+\end{frame}
+
+\begin{frame}
+\frametitle{Clojure in introductory class}
+Clojure is a promising language for an introductory class:
+\begin{itemize}
+\item Functional language
+\item Provides a large set of data structures (hashmaps, sets)
+ \item Has a large community of developers and users: libraries, participation in open source projects, parallel data processing,  etc. 
+\end{itemize} 
+\end{frame}
+
+\begin{frame}
+\frametitle{Challenges for using Clojure in introductory class}
+Challenges:
+\begin{itemize}
+\item Beginner-friendly IDEs are still under development
+\item Syntax is very flexible, so errors are detected late. Example: \\ 
+{(first '())} returns {\tt nil}, may cause null pointer exception later.  
+\item Errors are Java exceptions, are phrased in terms of Java types:
+\emcomment{Example}
+\end{itemize}
+\end{frame}
 
 \begin{frame}
 \frametitle{ Clojure error messages}
-\emcomment{Show before/after; two types of error recodring: preconditions, Clojure expression processing}
+\emcomment{Show before/after; two types of error recording: preconditions, Clojure expression processing}
 \emcomment{It's not as simple as surrounding the code with try/catch}
-\emcomment{Mention somewhere that we use Racket in one of our intro classes; usa Java in Data Strucures, use some Clojure later}
+\emcomment{Mention somewhere that we use Racket in one of our intro classes; use Java in Data Structures, use some Clojure later}
 \end{frame}
 
 \begin{frame}
 \frametitle{ Clojure error messages (cont)}
-\emcomment{Show before/after; two types of error recodring: preconditions (printing the arguments), Clojure expression processing}
+\emcomment{Show before/after; two types of error recording: preconditions (printing the arguments), Clojure expression processing}
 \end{frame}
 
 \begin{frame}
