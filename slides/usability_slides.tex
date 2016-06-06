@@ -25,6 +25,8 @@
 \newcommand{\todo}[1]{\textcolor{blue}{\comment{To Do: {#1}}}}
 \newcommand{\hfcomment}[1]{\textcolor{Teal}{\comment{Henry: {#1}}}}
 \newcommand{\thcomment}[1]{\textcolor{Coquelicot}{\comment{Thomas: {#1}}}}
+\newcommand{\R}[1]{\textcolor{blue}{\bf {#1}}}
+\newcommand{\Cl}[1]{\textcolor{ForestGreen}{\bf {#1}}}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 \begin{document}
@@ -192,15 +194,17 @@ Study:
 \item A study takes 1-1.5 hours, compensated for their time (to increase diversity)
 \item So far: 11 participants: 10 male, 1 female; range from first year to seniors; CS majors and non-majors.  
 \item Racket-based class: Fall 2015: 4, Fall 2014: 5, Earlier: 2. 
-\item Good at Racket: 2, were good at Racket, but forgot: 8, find Racket challenging: 1.
-\item Somewhat familiar with Clojure: 6, not familiar: 5.  
+%\item Good at Racket: 2, were good at Racket, but forgot: 8, find Racket challenging: 1.
+%\item Somewhat familiar with Clojure: 6, not familiar: 5.  
 \end{itemize}
 \end{frame}
 
 \begin{frame}
 \frametitle{Results}
 %\emcomment{Results: questions solved and times}
-Standard error messages
+{\bf Standard error messages} 
+\vspace{0.1in}
+
 \begin{tabular}{c | c| c| c | c }
 \hline
 {\bf ID} & {\bf Racket solved} & {\bf Racket time} & {\bf Clojure solved} & {\bf Clojure time} \\
@@ -213,7 +217,69 @@ Standard error messages
 \hline
 \end{tabular}
 
-*Participant 20 by mistake had two of the same questions in Racket and Clojure
+*Participant 20 by mistake had two questions being the same in Racket and Clojure. 
+\end{frame}
+
+\begin{frame}
+\frametitle{Results}
+%\emcomment{Results: questions solved and times}
+{\bf Modified (our) error messages}
+\vspace{0.1in}
+
+\begin{tabular}{c | c| c| c | c }
+\hline
+{\bf ID} & {\bf Racket solved} & {\bf Racket time} & {\bf Clojure solved} & {\bf Clojure time} \\
+\hline 
+2 & 7  & 20min 56sec & 8 & 16min 22sec  \\
+6 &  8  & 14min 25sec &  4  &  21min \\
+13 &  8 & 7min 53sec &  7 &  21min \\
+16 &  8  & 14min 41sec &  8  &  15min 53sec \\
+25 &  8  & 16min 46sec &  8  &  13min 9sec \\
+29 &  4  & 21min &  2  &  21min \\
+\hline
+\end{tabular}
+\end{frame}
+
+\begin{frame}
+\frametitle{Results}
+%\emcomment{Results: questions solved and times}
+{\bf Standard error messages: \Cl{background in Clojure}, \R{recent Racket}}
+\vspace{0.1in}
+
+\begin{tabular}{c | c| c| c | c }
+\hline
+{\bf ID} & {\bf Racket solved} & {\bf Racket time} & {\bf Clojure solved} & {\bf Clojure time} \\
+\hline 
+14 &  8 & ? &  \Cl{6}  &  \Cl{21min} \\
+17 &  8 & 19min 58 sec &  7 &  21min \\
+20* &  6 & 21min &  4 &  21min \\
+23 &  7 & 21min &  6  &  21min \\
+26 &  \R{8} & \R{??} &  \Cl{6} &  \Cl{21min} \\
+\hline
+\end{tabular}
+
+
+%*Participant 20 by mistake had two questions being the same in Racket and Clojure. 
+\end{frame}
+
+\begin{frame}
+\frametitle{Results}
+%\emcomment{Results: questions solved and times}
+{\bf Modified (our) error messages:  \Cl{background in Clojure}, \R{recent Racket}}
+\vspace{0.1in}
+
+\begin{tabular}{c | c| c| c | c }
+\hline
+{\bf ID} & {\bf Racket solved} & {\bf Racket time} & {\bf Clojure solved} & {\bf Clojure time} \\
+\hline 
+2 & 7  & 20min 56sec &  \Cl{8} & \Cl{16min 22sec} \\
+6 &  8  & 14min 25sec &  4  &  21min \\
+13 &  \R{8}  & \R{7min 53sec} &  \Cl{7}  &  \Cl{21min} \\
+16 &  8  & 14min 41sec &  \Cl{8}  &  \Cl{15min 53sec} \\
+25 &  8  & 16min 46sec &  \Cl{8}  &  \Cl{13min 9sec} \\
+29 &  4  & 21min &  2  &  21min \\
+\hline
+\end{tabular}
 \end{frame}
 
 \begin{frame}
