@@ -49,7 +49,7 @@ College Park, MD, June 7, 2016}
 \tableofcontents  
 \end{frame}
 
-\section{Clojure error messages}
+\section{Overview}
 
 \begin{frame}
 \frametitle{Clojure and goals of our project }
@@ -89,7 +89,7 @@ Clojure is a promising language for an introductory class:
 \end{itemize} 
 \end{frame}
 
-\begin{frame}
+\begin{frame}[fragile]
 \frametitle{Challenges for using Clojure in introductory class}
 Challenges:
 \begin{itemize}
@@ -97,9 +97,38 @@ Challenges:
 \item Syntax is very flexible, so errors are detected late. Example: \\ 
 {(first '())} returns {\tt nil}, may cause null pointer exception later.  
 \item Errors are Java exceptions, are phrased in terms of Java types:
-\emcomment{Example}
+\begin{verbatim}
+>(+ "hi")
+java.lang.ClassCastException: 
+Cannot cast java.lang.String to java.lang.Number
+\end{verbatim}
+\end{itemize}
+Our work: providing beginner-friendly error messages for Clojure. 
+\end{frame}
+
+\begin{frame}
+\frametitle{ Our project}
+To develop materials and setup that would make it possible to use Clojure in an introductory class. 
+\begin{itemize}
+\item Modifying error messages
+\item Evaluating how well new error messages work: usability study comparing our error messages to standard ones and to Racket
+\item Future work: integrate our messages into an IDE 
+\item Other work: graphical library that abstracts over state and objects; developing lecture notes 
 \end{itemize}
 \end{frame}
+
+\begin{frame}
+\frametitle{ Our project}
+To develop materials and setup that would make it possible to use Clojure in an introductory class. 
+\begin{itemize}
+\item {\bf Modifying error messages}
+\item {\bf Evaluating how well new error messages work: usability study comparing our error messages to standard ones and to Racket}
+\item Future work: integrate our messages into an IDE
+\item Other work: graphical library that abstracts over state and objects; developing lecture notes 
+\end{itemize}
+\end{frame}
+
+\section{Modifying error messages}
 
 \begin{frame}
 \frametitle{ Clojure error messages}
@@ -113,17 +142,23 @@ Challenges:
 \emcomment{Show before/after; two types of error recording: preconditions (printing the arguments), Clojure expression processing}
 \end{frame}
 
-\begin{frame}
-\frametitle{ Clojure IDEs}
-\emcomment{Difficulties in integration, this is not a current goal}
-\end{frame}
 
 \section{Usability study}
 
 \begin{frame}
 \frametitle{Usability study}
-\emcomment{We have a large student population that has had Racket class}
-\emcomment{Study structure}
+UMM has a large number of students familiar with Racket. 
+
+Study:
+\begin{itemize}
+\item 16 program fragments with errors, each has Racket and Clojure versions 
+\item Divided into 4 levels by difficulty
+\item Each participant gets 2 Racket, 2 Clojure questions at each level
+\item Overview of Racket, 8 Racket questions
+\item Overview of Clojure, 8 Clojure questions
+\item Screen capture while solving questions (21 minutes each set)
+\item A short interview at the end
+\end{itemize}
 \end{frame}
 
 \begin{frame}
@@ -132,20 +167,34 @@ Challenges:
 \end{frame}
 
 \begin{frame}
-\frametitle{Study questions}
+\frametitle{ Differences in testing environments}
+\emcomment{Would be good to include pictures}
+\end{frame}
+
+\begin{frame}
+\frametitle{Study questions (example 1)}
 
 \end{frame}
 
 \begin{frame}
-\frametitle{Study questions (cont)}
+\frametitle{Study questions (example 2)}
 
 \end{frame}
 
 \section{Results}
 
 \begin{frame}
-\frametitle{Study subjects overview}
-\emcomment{Stats}
+\frametitle{Study participants overview}
+\begin{itemize}
+\item Have had the class that used Racket
+\item Are not very familiar with Clojure 
+\item Participants invited via department mailing list and old class lists (some additionally personally invited)
+\item A study takes 1-1.5 hours, compensated for their time (to increase diversity)
+\item So far: 11 participants: 10 male, 1 female; range from first year to seniors; CS majors and non-majors.  
+\item Racket-based class: Fall 2015: 4, Fall 2014: 5, Earlier: 2. 
+\item Good at Racket: 2, were good at Racket, but forgot: 8, find Racket challenging: 1.
+\item Somewhat familiar with Clojure: 6, not familiar: 5.  
+\end{itemize}
 \end{frame}
 
 \begin{frame}
@@ -155,7 +204,7 @@ Challenges:
 
 \begin{frame}
 \frametitle{Results: being on track}
-\emcomment{Results: questions solved and time}
+\emcomment{Results: being on track}
 \end{frame}
 
 \begin{frame}
