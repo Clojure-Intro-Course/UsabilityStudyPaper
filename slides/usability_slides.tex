@@ -27,6 +27,7 @@
 \newcommand{\thcomment}[1]{\textcolor{Coquelicot}{\comment{Thomas: {#1}}}}
 \newcommand{\R}[1]{\textcolor{blue}{\bf {#1}}}
 \newcommand{\Cl}[1]{\textcolor{ForestGreen}{\bf {#1}}}
+\newcommand{\Java}[1]{\textcolor{Teal}{\bf {#1}}}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 \begin{document}
@@ -78,7 +79,7 @@ UMM current course structure:
 \end{itemize} 
 Seeing a functional language first is helpful (functional abstraction, higher-order functions). 
 
-Students have no problem picking up new languages. 
+%Students have no problem picking up new languages. 
 \end{frame}
 
 \begin{frame}
@@ -133,15 +134,25 @@ To develop materials and setup that would make it possible to use Clojure in an 
 \section{Modifying error messages}
 
 \begin{frame}
-\frametitle{ Clojure error messages}
+\frametitle{ Clojure error messages: example}
 \emcomment{Show before/after; two types of error recording: preconditions, Clojure expression processing}
-\emcomment{It's not as simple as surrounding the code with try/catch}
+%\emcomment{It's not as simple as surrounding the code with try/catch}
 \emcomment{Mention somewhere that we use Racket in one of our intro classes; use Java in Data Structures, use some Clojure later}
 \end{frame}
 
 \begin{frame}
-\frametitle{ Clojure error messages (cont)}
-\emcomment{Show before/after; two types of error recording: preconditions (printing the arguments), Clojure expression processing}
+\frametitle{Our approach}
+\begin{itemize}
+\item Can't just surround the program with try/catch: compilation errors and lazy sequences evaluation errors escape to REPL
+\item For now: load user's code via {\tt eval}, catch errors
+\item Two approaches:
+	\begin{itemize}
+	\item Overwrite core functions to add pre-conditions: {\tt +} takes numbers, {\tt first} takes a sequence, etc. Can print 		arguments that fail preconditions
+	\item Catch error messages and transform them using regular expressions
+	\end{itemize}
+\item Filter stack trace
+\end{itemize}
+Anecdotal evidence: this works well, catches most cases. 
 \end{frame}
 
 
@@ -149,9 +160,20 @@ To develop materials and setup that would make it possible to use Clojure in an 
 
 \begin{frame}
 \frametitle{Usability study}
-UMM has a large number of students familiar with Racket. 
+Usability study questions:
+\begin{enumerate}
+\item How do our error messages compare to standard Clojure messages?
+\item How so they compare to Racket? (Many UMM students are familiar with Racket)
+\item What works well, what needs improvement? 
+\end{enumerate}
+Study inspired by \emcomment{add a reference to the Racket paper and the static/dynamic typing paper}
 
-Study:
+{\bf Study is in progress, we are presenting preliminary results.}
+\end{frame}
+
+\begin{frame}
+\frametitle{Usability study}
+Usability study {\bf in progress}:
 \begin{itemize}
 \item 16 program fragments with errors, each has Racket and Clojure versions 
 \item Divided into 4 levels by difficulty
@@ -272,11 +294,52 @@ Study:
 \hline
 {\bf ID} & {\bf Racket solved} & {\bf Racket time} & {\bf Clojure solved} & {\bf Clojure time} \\
 \hline 
-2 & 7  & 20min 56sec &  \Cl{8} & \Cl{16min 22sec} \\
+2 & 7  & 21min 56sec &  \Cl{8} & \Cl{16min 22sec} \\
 6 &  8  & 14min 25sec &  4  &  21min \\
 13 &  \R{8}  & \R{7min 53sec} &  \Cl{7}  &  \Cl{21min} \\
 16 &  8  & 14min 41sec &  \Cl{8}  &  \Cl{15min 53sec} \\
 25 &  8  & 16min 46sec &  \Cl{8}  &  \Cl{13min 9sec} \\
+29 &  4  & 21min &  2  &  21min \\
+\hline
+\end{tabular}
+\end{frame}
+
+\begin{frame}
+\frametitle{Results}
+%\emcomment{Results: questions solved and times}
+{\bf Standard error messages: \Java{familiar with Java}} 
+\vspace{0.1in}
+
+\begin{tabular}{c | c| c| c | c }
+\hline
+{\bf ID} & {\bf Racket solved} & {\bf Racket time} & {\bf Clojure solved} & {\bf Clojure time} \\
+\hline 
+14 &  8 & ? &  6  &  21min \\
+17 &  8 & 19min 58 sec &  7 &  21min \\
+20* &  6 & 21min &  4 &  21min \\
+23 &  7 & 21min &  6  &  21min \\
+26 &  8 & ?? &  6 &  21min \\
+\hline
+\end{tabular}
+
+*Participant 20 by mistake had two questions being the same in Racket and Clojure. 
+\end{frame}
+
+\begin{frame}
+\frametitle{Results}
+%\emcomment{Results: questions solved and times}
+{\bf Modified (our) error messages:  \Java{familiar with Java}}
+\vspace{0.1in}
+
+\begin{tabular}{c | c| c| c | c }
+\hline
+{\bf ID} & {\bf Racket solved} & {\bf Racket time} & {\bf Clojure solved} & {\bf Clojure time} \\
+\hline 
+2 & 7  & 20min 56sec & 8 & 16min 22sec  \\
+6 &  8  & 14min 25sec &  4  &  21min \\
+13 &  8 & 7min 53sec &  7 &  21min \\
+16 &  8  & 14min 41sec &  8  &  15min 53sec \\
+25 &  8  & 16min 46sec &  8  &  13min 9sec \\
 29 &  4  & 21min &  2  &  21min \\
 \hline
 \end{tabular}
