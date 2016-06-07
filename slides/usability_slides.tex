@@ -191,7 +191,7 @@ Anecdotal evidence: this works well, catches most cases.
 Usability study questions:
 \begin{enumerate}
 \item How do our error messages compare to standard Clojure messages?
-\item How so they compare to Racket? (Many UMM students are familiar with Racket)
+\item How so they compare to Racket? %(Many UMM students are familiar with Racket)
 \item What works well, what needs improvement? 
 \end{enumerate}
 Ideas for the study:
@@ -269,6 +269,7 @@ Not included in the study:
 \item Vectors, {\tt conj, into} 
 \item Many higher-order functions
 \item Strings 
+\item Automated testing (in either language)
 \end{itemize}
 Some code isn't idiomatic. 
 \end{frame}
@@ -292,12 +293,66 @@ Some code isn't idiomatic.
 
 \begin{frame}[fragile]
 \frametitle{Study questions (easy)}
+{\it Make the following function work so that all the test cases below evaluate to true. }
+\begin{verbatim}
+(define (square-and-multiply x y) ;;; Racket
+  (* (* X X) y))
+
+(equal? (square-and-multiply 2 4) 16)
+(equal? (square-and-multiply 3 0) 0)
+(equal? (square-and-multiply 1 5) 5)
+\end{verbatim}
+
+\begin{verbatim}
+(defn square-and-multiply [x y] ;;; Clojure
+  (* (* X X) y))
+\end{verbatim}
+\end{frame}
+
+\begin{frame}[fragile]
+\frametitle{Study questions (easy)}
+%%{\it Make the following function work so that all the test cases below evaluate to true. }
+\begin{verbatim}
+(define (square-and-multiply x y) ;;; Racket
+  (* (* X X) y))
+\end{verbatim}
+Racket error: {\tt X: this variable is not defined} 
+
+\begin{verbatim}
+(defn square-and-multiply [x y] ;;; Clojure
+  (* (* X X) y))
+\end{verbatim}
+
+Clojure standard: {\tt java.lang.RuntimeException: Unable to resolve symbol: X in this context}
+
+
+\vspace*{.2in}
+
+Our Clojure: {\tt Syntax error: Name X is undefined}
 
 \end{frame}
 
-\begin{frame}
+\begin{frame}[fragile]
 \frametitle{Study questions (harder)}
+\begin{verbatim}
+(define (large-evens numbers bound)
+  (filter (lambda (x) (>= x bound))
+          (map even? numbers)))
 
+(equal? (large-evens '(22 23 5 30 27 4) 5) '(22 30))
+(equal? (large-evens '(22 23 5 30 27 4) 3) '(22 30 4))
+(equal? (large-evens '(22 23 5 30 27 4) 40) '())
+\end{verbatim}
+\begin{verbatim}
+(defn large-evens [numbers bound]
+  (filter (fn [x] (>= x bound))
+          (map even? numbers)))
+\end{verbatim}
+\end{frame}
+
+\begin{frame}[fragile]
+\frametitle{Study questions (harder)}
+\emcomment{add the message}
 \end{frame}
 
 \section{Results}
@@ -406,7 +461,8 @@ For those somewhat familiar with Clojure results are closer to Racket.
 We also measured:
 \begin{itemize}
 \item Amount of time on track. So far there doesn't seem to be a significant difference (most participants are on track most or all of the time). 
-\item However, even when a participant is looking for the right thing, standard Clojure makes a specific place and cause of the error difficult to find. Example: a subtly misspelled function name leads to "name ... undefined error". Participants  look for proper syntax for function definition: reasonable interpretation of the message. 
+\item %However, even when a participant is looking for the right thing, 
+Standard Clojure makes a specific place and cause of the error difficult to find. Example: a subtly misspelled function name leads to "name ... undefined" error. Participants  look for proper syntax for function definition: reasonable interpretation of the message. 
 \item Number of runs per question attempted. Ranges between 1.25 and 4. No clear correlations at this point. 
 \end{itemize}
 \end{frame}
@@ -463,15 +519,16 @@ General directions:
 
 \begin{frame}
 \frametitle{Acknowledgments}
-	Our research was sponsored by:
+Thanks to...
 	\begin{itemize}
-	\item HHMI, UMN UROP, LSAMP
+	\item HHMI, UMN UROP, LSAMP 
+	\item UMM Research students: Myeongjae (Tony) Song, Richard Stangl, and Shamund Gordon 
         \item Coginitect, Inc providing funding for participants' compensation 
+	\item Study participants 
 	\end{itemize}
 	{\centering
 	\noindent
-	Thank you! \par
-	Any questions? \par
+	Questions? \par
 	}
 \end{frame}
 \end{document}
