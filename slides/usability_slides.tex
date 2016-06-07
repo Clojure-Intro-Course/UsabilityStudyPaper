@@ -363,7 +363,7 @@ Some code isn't idiomatic.
 26 &  \R{8} & \R{14min 21sec} &  \Cl{6} &  \Cl{21min} \\
 \hline
 \end{tabular}
-
+Even those who claim to know Clojure took the entire time and didn't solve all the questions. 
 
 %*Participant 20 by mistake had two questions being the same in Racket and Clojure. 
 \end{frame}
@@ -386,18 +386,24 @@ Some code isn't idiomatic.
 29 &  4  & 21min &  \NoJava{2}  & \NoJava{21min} \\
 \hline
 \end{tabular}
+For those somewhat familiar with Clojure results are closer to Racket. 
 \end{frame}
 
 
 \begin{frame}
-\frametitle{Results: being on track}
-\emcomment{Results: being on track}
+\frametitle{Other parameters measured}
+We also measured:
+\begin{itemize}
+\item Amount of time on track. So far there doesn't seem to be a significant difference (most participants are on track most or all of the time). 
+\item However, even when a participant is looking for the right thing, standard Clojure makes a specific place and cause of the error difficult to find. Example: a subtly misspelled function name leads to "name ... undefined error". Participants  look for proper syntax for function definition: reasonable interpretation of the message. 
+\item Number of runs per question attempted. Ranges between 1.25 and 4. No clear correlations at this point. 
+\end{itemize}
 \end{frame}
 
-\begin{frame}
-\frametitle{Results:interview questions}
-\emcomment{Interview questions and feedback}
-\end{frame}
+%\begin{frame}
+%\frametitle{Results:interview questions}
+%\emcomment{Interview questions and feedback}
+%\end{frame}
 
 \section{Conclusions and future work}
 
@@ -406,21 +412,42 @@ Some code isn't idiomatic.
 \begin{frame}
 Preliminary conclusions:
 \begin{itemize}
-\item 
+\item Standard Clojure messages make it difficult to solve all questions. Our modified messages make results closer to Racket, especially for 
+those somewhat familiar with Clojure
+\item The stack trace in standard Clojure is overwhelming, makes it hard to find errors 
 \end{itemize}
-\emcomment{Our error messages vs standard}
-\emcomment{Comparison to Racket}
-\emcomment{Correlation to background}
+Corollaries with not enough data (but some anecdotal evidence):
+\begin{itemize}
+\item For easier questions all error messages are sufficient
+\item Differences show up more in harder questions 
+\item Java background helps in understanding standard error messages
+\end{itemize}
 \end{frame}
 
 \begin{frame}
-\frametitle{Conclusions}
-\emcomment{Thoughts on study setup}
+\frametitle{Thoughts on the usability study}
+\begin{itemize}
+\item Need to make an effort to get a diverse population. Would like to get more non-CS majors with no Java background
+\item Screen capture helps in tracking participants' thought process
+\item Putting together a good set of questions is challenging
+\item Comparing to Racket provides a useful, but not perfect, way of estimating participants' level 
+\item Question-by-question comparison between different languages would be interesting
+\end{itemize}
 \end{frame}
 
 \begin{frame}
 \frametitle{Future work}
-\emcomment{How much do people use error messages?}
+Work on the study:
+\begin{itemize}
+\item Recruit a more diverse (by background) participants' group
+\item Analyze specifics of actions, question-by-question
+\end{itemize}
+General directions:
+\begin{itemize}
+\item Work on improving error messages based on the study
+\item Work on incorporating error messages into an IDE (collaboration with IDE developers)
+\item Wrap up development of course material, teach a class to a small group of students 
+\end{itemize}
 \end{frame}
 
 \begin{frame}
