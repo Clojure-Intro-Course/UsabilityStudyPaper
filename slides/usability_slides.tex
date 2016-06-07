@@ -352,7 +352,15 @@ Our Clojure: {\tt Syntax error: Name X is undefined}
 
 \begin{frame}[fragile]
 \frametitle{Study questions (harder)}
-\emcomment{add the message}
+\begin{verbatim}
+(defn large-evens [numbers bound]
+  (filter (fn [x] (>= x bound))
+          (map even? numbers)))
+
+(println (= (large-evens '(22 23 5 30 27 4) 5) '(22 30)))
+(println (= (large-evens '(22 23 5 30 27 4) 3) '(22 30 4)))
+(println (= (large-evens '(22 23 5 30 27 4) 40) '()))
+\end{verbatim}
 \end{frame}
 
 \section{Results}
