@@ -191,7 +191,7 @@ Anecdotal evidence: this works well, catches most cases.
 Usability study questions:
 \begin{enumerate}
 \item How do our error messages compare to standard Clojure messages?
-\item How so they compare to Racket? %(Many UMM students are familiar with Racket)
+\item How do they compare to Racket? %(Many UMM students are familiar with Racket)
 \item What works well, what needs improvement? 
 \end{enumerate}
 Ideas for the study:
@@ -264,14 +264,14 @@ For the study we picked a common subset of Racket and Clojure familiar to studen
 \frametitle{ Clojure features not included}
 Not included in the study:
 \begin{itemize}
-\item loop/recur
-\item Anonymous function literals, such as {\tt \#(\% + 2)}
-\item Vectors, {\tt conj, into} 
-\item Many higher-order functions
 \item Strings 
+\item Vectors, {\tt conj, into}
+\item loop/recur
+\item Function literals, such as {\tt \#(\% + 2)} 
+\item Many higher-order functions
 \item Automated testing (in either language)
 \end{itemize}
-Some code isn't idiomatic. 
+Some code in our examples isn't idiomatic. 
 \end{frame}
 
 \begin{frame}
@@ -353,12 +353,14 @@ Our Clojure: {\tt Syntax error: Name X is undefined}
 \begin{frame}[fragile]
 \frametitle{Study questions (harder)}
 Racket error: {\tt >=: expects a real as 1st argument, given true}
+
 \vspace*{.2in}
+
 Standard Clojure: {\tt java.lang.ClassCastException: java.lang.Boolean cannot be cast to java.lang.Number}
 
 \vspace*{.2in}
 
-Our Clojure: {\tt Error: In function >=, the first argument true must be a number but is a boolean.}
+Our Clojure: {\tt Error: In function >=, the first argument {\bf true}  must be a number but is a boolean.}
 \end{frame}
 
 \section{Results}
