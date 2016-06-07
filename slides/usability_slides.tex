@@ -186,7 +186,7 @@ type systems on the usability of undocumented software}.
 \item Divided into 4 levels by difficulty
 \item Each participant gets 2 Racket, 2 Clojure questions at each level
 \item Randomly assigned standard/modified Clojure error messages
-\item Overview of Racket, 8 Racket questions
+\item Overview of Racket, 8 Racket questions 
 \item Overview of Clojure, 8 Clojure questions
 \item Screen capture while solving questions (21 minutes each set)
 \item A short interview at the end
@@ -194,8 +194,39 @@ type systems on the usability of undocumented software}.
 \end{frame}
 
 \begin{frame}
-\frametitle{ Differences between Clojure and Racket}
-\emcomment{Key syntax differences, what subset we chose}
+\frametitle{ Clojure and Racket: common elements}
+For the study we picked a common subset of Racket and Clojure familiar to students:
+\begin{itemize}
+\item Numbers, booleans, strings 
+\item Functions and variables definitions
+\item {\tt if, cond}
+\item Structures (Racket), hashmaps (Clojure)
+\item Recursion
+\item Higher-order functions: {\tt map, filter, reduce/fold}
+\item Anonymous functions
+\end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]
+\frametitle{ Clojure and Racket:  differences}
+\begin{itemize}
+\item Syntax differences in function definitions:
+\begin{verbatim}
+(define (f x) (+ x 2)) ; Racket
+
+(defn f [x] (+ x 2)) ; Clojure
+\end{verbatim}
+\item Structures in Racket vs hashmaps in Clojure:
+\begin{verbatim}
+;; Structure in Racket
+(define-struct point (x y))
+(define point1 (make-point 5 7))
+(point-x point1)
+
+
+\end{verbatim}
+\end{itemize}
+\emcomment{Features we are not using in  Clojure}
 \end{frame}
 
 \begin{frame}
@@ -326,7 +357,12 @@ type systems on the usability of undocumented software}.
 \section{Conclusions and future work}
 
 \frametitle{Conclusions}
+
 \begin{frame}
+Preliminary conclusions:
+\begin{itemize}
+\item 
+\end{itemize}
 \emcomment{Our error messages vs standard}
 \emcomment{Comparison to Racket}
 \emcomment{Correlation to background}
