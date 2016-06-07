@@ -133,11 +133,39 @@ To develop materials and setup that would make it possible to use Clojure in an 
 
 \section{Modifying error messages}
 
-\begin{frame}
+\begin{frame}[fragile]
 \frametitle{ Clojure error messages: example}
-\emcomment{Show before/after; two types of error recording: preconditions, Clojure expression processing}
-%\emcomment{It's not as simple as surrounding the code with try/catch}
-\emcomment{Mention somewhere that we use Racket in one of our intro classes; use Java in Data Structures, use some Clojure later}
+Code: {\tt (+ 1 "hi")}
+
+Standard Clojure error:
+\begin{verbatim}
+java.lang.ClassCastException: 
+	java.lang.String cannot be cast to java.lang.Number
+	clojure.lang.Numbers/add (Numbers.java line 128)
+	clojure.lang.Numbers/add (Numbers.java line 3640)
+	intro.test/eval8691 (test_standard.clj line 8)
+	clojure.lang.Compiler/eval (Compiler.java line 6792)
+	clojure.lang.Compiler/load (Compiler.java line 7237)
+	clojure.lang.Compiler/loadFile (Compiler.java line 7175)
+	clojure.lang.RT$3/invoke (RT.java line 319)
+	intro.core/-main (core.clj line 19)
+	....>15  more stack trace lines....
+\end{verbatim}
+\end{frame}
+
+\begin{frame}[fragile]
+\frametitle{ Clojure error messages: example}
+Our error message for the same code  {\tt (+ 1 "hi")}:
+\begin{verbatim}
+Error: In function +, the second argument "hi" must be 
+a number but is a string.
+Found in file 
+C:\Users\E\Desktop\clojure-intro-class\src\intro\test.clj 
+on, or before, line 8.
+	corefns.corefns/+ (corefns.clj line 269)
+	intro.test/eval8691 (test.clj line 11)
+	intro.core/-main (core.clj line 20)
+\end{verbatim}
 \end{frame}
 
 \begin{frame}
@@ -197,7 +225,7 @@ type systems on the usability of undocumented software}.
 \frametitle{ Clojure and Racket: common elements}
 For the study we picked a common subset of Racket and Clojure familiar to students:
 \begin{itemize}
-\item Numbers, booleans, strings 
+\item Numbers, booleans, lists
 \item Functions and variables definitions
 \item {\tt if, cond}
 \item Structures (Racket), hashmaps (Clojure)
@@ -223,11 +251,28 @@ For the study we picked a common subset of Racket and Clojure familiar to studen
 (define point1 (make-point 5 7))
 (point-x point1)
 
-
+;; Clojure hashmaps
+(def point1 {:x 5, :y 7})
+ (:x point1)
 \end{verbatim}
+\item {\tt fold} vs {\tt reduce}, {\tt nil} handling, etc. 
 \end{itemize}
-\emcomment{Features we are not using in  Clojure}
+%\emcomment{Features we are not using in  Clojure}
 \end{frame}
+
+\begin{frame}
+\frametitle{ Clojure features not included}
+Not included in the study:
+\begin{itemize}
+\item loop/recur
+\item Anonymous function literals, such as {\tt \#(\% + 2)}
+\item Vectors, {\tt conj, into} 
+\item Many higher-order functions
+\item Strings 
+\end{itemize}
+Some code isn't idiomatic. 
+\end{frame}
+
 
 \begin{frame}
 \frametitle{ Differences in testing environments}
@@ -270,11 +315,11 @@ For the study we picked a common subset of Racket and Clojure familiar to studen
 \hline
 {\bf ID} & {\bf Racket  \#} & {\bf Racket time} & {\bf Clojure  \#} & {\bf Clojure time} \\
 \hline 
-14 &  8 & ? &  6  &  21min \\
+14 &  8 & 12min 20sec &  6  &  21min \\
 17 &  8 & 19min 58 sec &  7 &  21min \\
 20* &  6 & 21min &  4 &  21min \\
 23 &  7 & 21min &  6  &  21min \\
-26 &  8 & ?? &  6 &  21min \\
+26 &  8 & 14min 21sec &  6 &  21min \\
 \hline
 \end{tabular}
 
@@ -311,11 +356,11 @@ For the study we picked a common subset of Racket and Clojure familiar to studen
 \hline
 {\bf ID} & {\bf Racket  \#} & {\bf Racket time} & {\bf Clojure \#} & {\bf Clojure time} \\
 \hline 
-14 &  8 & ? &  \Cl{6}  &  \Cl{21min} \\
+14 &  8 & 12min 20sec &  \Cl{6}  &  \Cl{21min} \\
 17 &  8 & 19min 58 sec &  7 &  21min \\
 20* &  6 & 21min &  4 &  21min \\
 23 &  7 & 21min &  6  &  21min \\
-26 &  \R{8} & \R{??} &  \Cl{6} &  \Cl{21min} \\
+26 &  \R{8} & \R{14min 21sec} &  \Cl{6} &  \Cl{21min} \\
 \hline
 \end{tabular}
 
